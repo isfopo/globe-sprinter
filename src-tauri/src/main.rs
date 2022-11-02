@@ -6,6 +6,7 @@
 use std::process::Command;
 use tauri::{
     ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
+    SystemTraySubmenu,
 };
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -15,8 +16,11 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
+    let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
+    let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
+
     let tray_menu = SystemTrayMenu::new()
-        .add_item(CustomMenuItem::new("run", "Run"))
+        .add_submenu(sub_menu)
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"));
@@ -27,7 +31,9 @@ fn main() {
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "run" => {
-                    app.clipboard_manager().write_text("ls");
+                    app.clipboard_manager()
+                        .write_text("ls")
+                        .expect("failed to copy");
 
                     let output = Command::new("open")
                         .arg("/bin/zsh")
