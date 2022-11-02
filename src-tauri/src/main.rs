@@ -4,6 +4,11 @@
 )]
 
 use std::process::Command;
+use std::{
+    fs::{create_dir, File},
+    io::Write,
+};
+use tauri::api::file;
 use tauri::{
     ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
     SystemTraySubmenu,
@@ -35,36 +40,66 @@ fn main() {
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
+        .setup(|app| {
+            app.path_resolver().app_dir();
+            Ok(())
+        })
         .system_tray(SystemTray::new().with_menu(tray_menu))
         .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                "run" => {
-                    app.clipboard_manager()
-                        .write_text("ls")
-                        .expect("failed to copy");
+            SystemTrayEvent::MenuItemClick { id, .. } => {
+                let mut path = app.path_resolver().app_dir().unwrap();
+                path.push("config.json");
 
-                    let output = Command::new("open")
-                        .arg("/bin/zsh")
-                        .output()
-                        .expect("failed to execute process");
-                    println!("{}", output.status.to_string());
-                }
-                "open" => {
-                    if let Some(window) = app.get_window("main") {
-                        window.show().unwrap();
-                    } else {
-                        println!("no window");
+                let config = match file::read_string(path.clone()) {
+                    Ok(config) => config,
+                    Err(_err) => {
+                        let mut file = File::create(path.clone());
+                        match file {
+                            Ok(mut file) => {
+                                write!(file, "{}", "{}");
+                                format!("{}", "{}")
+                            }
+                            Err(_) => {
+                                create_dir(app.path_resolver().app_dir().unwrap()).unwrap();
+                                let mut file = File::create(path).unwrap();
+                                write!(file, "{}", "{}");
+                                format!("{}", "{}")
+                            }
+                        }
                     }
+                };
+
+                println!("{}", config);
+
+                match id.as_str() {
+                    "run" => {
+                        app.clipboard_manager()
+                            .write_text("ls")
+                            .expect("failed to copy");
+
+                        let output = Command::new("open")
+                            .arg("/bin/zsh")
+                            .output()
+                            .expect("failed to execute process");
+                        println!("{}", output.status.to_string());
+                    }
+                    "open" => {
+                        if let Some(window) = app.get_window("main") {
+                            window.show().unwrap();
+                        } else {
+                            println!("no window");
+                        }
+                    }
+                    "hide" => {
+                        let window = app.get_window("main").unwrap();
+                        window.hide().unwrap();
+                    }
+                    "quit" => {
+                        std::process::exit(0);
+                    }
+                    _ => {}
                 }
-                "hide" => {
-                    let window = app.get_window("main").unwrap();
-                    window.hide().unwrap();
-                }
-                "quit" => {
-                    std::process::exit(0);
-                }
-                _ => {}
-            },
+            }
             _ => {}
         })
         .build(tauri::generate_context!())
