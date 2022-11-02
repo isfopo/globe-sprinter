@@ -16,6 +16,14 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
+    // read config file, create if doesn't exists
+
+    // turn file into object
+
+    // add folders and commands as submenus and items, respectively
+
+    // add open, hide and quit items
+
     let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
     let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
 
