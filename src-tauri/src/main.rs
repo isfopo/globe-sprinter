@@ -14,8 +14,8 @@ fn greet(name: &str) -> String {
 fn main() {
     let tray_menu = SystemTrayMenu::new()
         .add_item(CustomMenuItem::new("open", "Open"))
-        .add_item(CustomMenuItem::new("close", "Close"))
-        .add_item(CustomMenuItem::new("hide", "Hide"));
+        .add_item(CustomMenuItem::new("hide", "Hide"))
+        .add_item(CustomMenuItem::new("quit", "Quit"));
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
