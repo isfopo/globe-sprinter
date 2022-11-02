@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use std::process::Command;
 use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
@@ -13,6 +14,7 @@ fn greet(name: &str) -> String {
 
 fn main() {
     let tray_menu = SystemTrayMenu::new()
+        .add_item(CustomMenuItem::new("run", "Run"))
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"));
@@ -22,6 +24,13 @@ fn main() {
         .system_tray(SystemTray::new().with_menu(tray_menu))
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "run" => {
+                    let output = Command::new("open")
+                        .arg("/bin/zsh")
+                        .output()
+                        .expect("failed to execute process");
+                    println!("{}", output.status.to_string())
+                }
                 "open" => {
                     if let Some(window) = app.get_window("main") {
                         window.show().unwrap()
