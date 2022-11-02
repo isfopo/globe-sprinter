@@ -4,7 +4,9 @@
 )]
 
 use std::process::Command;
-use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use tauri::{
+    ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
+};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -25,6 +27,8 @@ fn main() {
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "run" => {
+                    app.clipboard_manager().write_text("ls");
+
                     let output = Command::new("open")
                         .arg("/bin/zsh")
                         .output()
