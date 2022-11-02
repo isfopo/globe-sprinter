@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::{Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use tauri::{CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -12,40 +12,29 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
-    let tray_menu = SystemTrayMenu::new();
+    let tray_menu = SystemTrayMenu::new()
+        .add_item(CustomMenuItem::new("open", "Open"))
+        .add_item(CustomMenuItem::new("close", "Close"))
+        .add_item(CustomMenuItem::new("hide", "Hide"));
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
         .system_tray(SystemTray::new().with_menu(tray_menu))
         .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::LeftClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                println!("system tray received a left click");
-            }
-            SystemTrayEvent::RightClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                println!("system tray received a right click");
-            }
-            SystemTrayEvent::DoubleClick {
-                position: _,
-                size: _,
-                ..
-            } => {
-                println!("system tray received a double click");
-            }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-                "quit" => {
-                    std::process::exit(0);
+                "open" => {
+                    if let Some(window) = app.get_window("main") {
+                        window.show().unwrap()
+                    } else {
+                        println!("no window")
+                    }
                 }
                 "hide" => {
                     let window = app.get_window("main").unwrap();
                     window.hide().unwrap();
+                }
+                "quit" => {
+                    std::process::exit(0);
                 }
                 _ => {}
             },
