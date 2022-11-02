@@ -39,13 +39,13 @@ fn main() {
                         .arg("/bin/zsh")
                         .output()
                         .expect("failed to execute process");
-                    println!("{}", output.status.to_string())
+                    println!("{}", output.status.to_string());
                 }
                 "open" => {
                     if let Some(window) = app.get_window("main") {
-                        window.show().unwrap()
+                        window.show().unwrap();
                     } else {
-                        println!("no window")
+                        println!("no window");
                     }
                 }
                 "hide" => {
