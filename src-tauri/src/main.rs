@@ -34,6 +34,7 @@ fn main() {
 
     let tray_menu = SystemTrayMenu::new()
         .add_submenu(sub_menu)
+        .add_item(CustomMenuItem::new("config", "Configure"))
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"));
@@ -82,6 +83,12 @@ fn main() {
                             .output()
                             .expect("failed to execute process");
                         println!("{}", output.status.to_string());
+                    }
+                    "config" => {
+                        Command::new("open")
+                            .arg(path)
+                            .output()
+                            .expect("failed to execute process");
                     }
                     "open" => {
                         if let Some(window) = app.get_window("main") {
