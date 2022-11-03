@@ -12,7 +12,7 @@ use std::{
 };
 use tauri::api::file;
 use tauri::{
-    App, AppHandle, ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
+    AppHandle, ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
     SystemTrayMenu, SystemTraySubmenu,
 };
 
