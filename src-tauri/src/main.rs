@@ -107,7 +107,7 @@ fn main() {
                             .output()
                             .expect("failed to execute process");
                     }
-                    None => println!("no command"),
+                    None => {}
                 }
 
                 match id.as_str() {
