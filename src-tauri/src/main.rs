@@ -3,6 +3,7 @@
     windows_subsystem = "windows"
 )]
 
+use serde_json::Value;
 use std::process::Command;
 use std::{
     fs::{create_dir, File},
@@ -35,42 +36,54 @@ fn main() {
     let tray_menu = SystemTrayMenu::new()
         .add_submenu(sub_menu)
         .add_item(CustomMenuItem::new("config", "Configure"))
+        .add_item(CustomMenuItem::new("list", "List"))
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"));
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
+        .system_tray(SystemTray::new().with_menu(tray_menu))
         .setup(|app| {
             app.path_resolver().app_dir();
             Ok(())
         })
-        .system_tray(SystemTray::new().with_menu(tray_menu))
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => {
                 let mut path = app.path_resolver().app_dir().unwrap();
                 path.push("config.json");
 
-                let config = match file::read_string(path.clone()) {
+                let json = match file::read_string(path.clone()) {
                     Ok(config) => config,
-                    Err(_err) => {
-                        let mut file = File::create(path.clone());
-                        match file {
-                            Ok(mut file) => {
-                                write!(file, "{}", "{}");
-                                format!("{}", "{}")
-                            }
-                            Err(_) => {
-                                create_dir(app.path_resolver().app_dir().unwrap()).unwrap();
-                                let mut file = File::create(path).unwrap();
-                                write!(file, "{}", "{}");
-                                format!("{}", "{}")
-                            }
+                    Err(_err) => match File::create(path.clone()) {
+                        Ok(mut file) => {
+                            write!(file, "{}", "{}").unwrap();
+                            format!("{}", "{}")
                         }
-                    }
+                        Err(_) => {
+                            create_dir(app.path_resolver().app_dir().unwrap()).unwrap();
+                            let mut file = File::create(path.clone()).unwrap();
+                            write!(file, "{}", "{}").unwrap();
+                            format!("{}", "{}")
+                        }
+                    },
                 };
 
-                println!("{}", config);
+                let config: Value = serde_json::from_str(json.as_str()).unwrap();
+
+                match config.as_object().unwrap().get(id.as_str()) {
+                    Some(value) => {
+                        app.clipboard_manager()
+                            .write_text(value.as_str().unwrap())
+                            .expect("failed to copy");
+
+                        Command::new("open")
+                            .arg("/bin/zsh")
+                            .output()
+                            .expect("failed to execute process");
+                    }
+                    None => println!("no command"),
+                }
 
                 match id.as_str() {
                     "run" => {
