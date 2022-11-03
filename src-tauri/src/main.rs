@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use serde_json::Value;
+use serde_json::{from_str, Value};
 use std::process::Command;
 use std::{
     fs::{create_dir, File},
@@ -69,7 +69,7 @@ fn main() {
                     },
                 };
 
-                let config: Value = serde_json::from_str(json.as_str()).unwrap();
+                let config: Value = from_str(json.as_str()).unwrap();
 
                 match config.as_object().unwrap().get(id.as_str()) {
                     Some(value) => {
