@@ -91,11 +91,10 @@ fn main() {
                             .write_text("ls")
                             .expect("failed to copy");
 
-                        let output = Command::new("open")
+                        Command::new("open")
                             .arg("/bin/zsh")
                             .output()
                             .expect("failed to execute process");
-                        println!("{}", output.status.to_string());
                     }
                     "config" => {
                         Command::new("open")
