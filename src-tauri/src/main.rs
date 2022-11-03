@@ -30,23 +30,31 @@ fn main() {
 
     // add open, hide and quit items
 
-    let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
-    let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
-
-    let tray_menu = SystemTrayMenu::new()
-        .add_submenu(sub_menu)
-        .add_item(CustomMenuItem::new("config", "Configure"))
-        .add_item(CustomMenuItem::new("list", "List"))
-        .add_item(CustomMenuItem::new("open", "Open"))
-        .add_item(CustomMenuItem::new("hide", "Hide"))
-        .add_item(CustomMenuItem::new("quit", "Quit"));
-
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
-        .system_tray(SystemTray::new().with_menu(tray_menu))
         .setup(|app| {
-            app.path_resolver().app_dir();
-            Ok(())
+            Ok({
+                app.path_resolver().app_dir();
+
+                let handle = app.handle();
+
+                let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
+                let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
+
+                let tray_menu = SystemTrayMenu::new()
+                    .add_submenu(sub_menu)
+                    .add_item(CustomMenuItem::new("config", "Configure"))
+                    .add_item(CustomMenuItem::new("list", "List"))
+                    .add_item(CustomMenuItem::new("open", "Open"))
+                    .add_item(CustomMenuItem::new("hide", "Hide"))
+                    .add_item(CustomMenuItem::new("quit", "Quit"));
+
+                SystemTray::new()
+                    .with_id("main")
+                    .with_menu(tray_menu)
+                    .build(&handle)
+                    .expect("unable to create tray");
+            })
         })
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => {
