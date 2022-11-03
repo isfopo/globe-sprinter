@@ -76,6 +76,14 @@ fn main() {
                     .add_item(CustomMenuItem::new("hide", "Hide"))
                     .add_item(CustomMenuItem::new("quit", "Quit"));
 
+                let path = get_config_path(&handle);
+                let config = get_config(path.clone());
+
+                for (key, value) in config.as_object().unwrap().into_iter().rev() {
+                    println!("{} / {}", key, value);
+                    // tray_menu.add_item(CustomMenuItem::new(key, "value.as_str()"));
+                }
+
                 SystemTray::new()
                     .with_id("main")
                     .with_menu(tray_menu)
