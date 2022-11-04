@@ -61,8 +61,6 @@ fn main() {
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
             Ok({
-                app.path_resolver().app_dir();
-
                 let handle = app.handle();
 
                 let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
