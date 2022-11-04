@@ -3,7 +3,7 @@
     windows_subsystem = "windows"
 )]
 
-use serde_json::{from_str, Value};
+use serde_json::{from_str, Map, Value};
 use std::path::PathBuf;
 use std::process::Command;
 use std::{
@@ -15,6 +15,7 @@ use tauri::{
     AppHandle, ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
     SystemTrayMenu, SystemTraySubmenu,
 };
+use tauri_runtime::menu::SystemTrayMenuEntry;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -48,6 +49,23 @@ fn get_config(path: PathBuf) -> Value {
     return from_str(json.as_str()).unwrap();
 }
 
+fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
+    let mut menu = SystemTrayMenu::new();
+
+    for (key, value) in config.into_iter().rev() {
+        menu.items
+            .push(SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(
+                value.as_str().unwrap(),
+                key,
+            )))
+    }
+
+    menu.add_item(CustomMenuItem::new("config", "Configure"))
+        .add_item(CustomMenuItem::new("open", "Open"))
+        .add_item(CustomMenuItem::new("hide", "Hide"))
+        .add_item(CustomMenuItem::new("quit", "Quit"))
+}
+
 fn main() {
     // read config file, create if doesn't exists
 
@@ -66,24 +84,11 @@ fn main() {
                 let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
                 let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
 
-                let tray_menu = SystemTrayMenu::new()
-                    .add_submenu(sub_menu)
-                    .add_item(CustomMenuItem::new("config", "Configure"))
-                    .add_item(CustomMenuItem::new("list", "List"))
-                    .add_item(CustomMenuItem::new("open", "Open"))
-                    .add_item(CustomMenuItem::new("hide", "Hide"))
-                    .add_item(CustomMenuItem::new("quit", "Quit"));
                 let config = get_config(get_config_path(&handle));
-
-
-                for (key, value) in config.as_object().unwrap().into_iter().rev() {
-                    println!("{} / {}", key, value);
-                    // tray_menu.add_item(CustomMenuItem::new(key, "value.as_str()"));
-                }
 
                 SystemTray::new()
                     .with_id("main")
-                    .with_menu(tray_menu)
+                    .with_menu(generate_menu(config.as_object().unwrap()))
                     .build(&handle)
                     .expect("unable to create tray");
             })
