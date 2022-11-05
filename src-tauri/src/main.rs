@@ -55,11 +55,7 @@ fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
     let mut menu = SystemTrayMenu::new();
 
     for (key, value) in config.into_iter().rev() {
-        menu.items
-            .push(SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(
-                value.as_str().unwrap(),
-                key,
-            )))
+        menu.items.push(generate_menu_entry(key, value))
     }
 
     menu.add_native_item(SystemTrayMenuItem::Separator)
@@ -67,6 +63,13 @@ fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"))
+}
+
+fn generate_menu_entry(key: &String, value: &Value) -> SystemTrayMenuEntry {
+    match value.as_str() {
+        Some(value) => SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(value, key)),
+        None => SystemTrayMenuEntry::CustomItem(CustomMenuItem::new("value", "key")),
+    }
 }
 
 fn main() {
@@ -79,7 +82,7 @@ fn main() {
                 let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
                 let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
 
-                let config = get_config(get_config_path(&handle));
+                let config = get_config(get_config_path(&app.handle()));
 
                 SystemTray::new()
                     .with_id("main")
