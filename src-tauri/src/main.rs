@@ -30,23 +30,25 @@ fn get_config_path(app: &AppHandle) -> PathBuf {
 }
 
 fn get_config(path: PathBuf) -> Value {
-    let json = match file::read_string(path.clone()) {
-        Ok(config) => config,
-        Err(_err) => match File::create(path.clone()) {
-            Ok(mut file) => {
-                write!(file, "{}", "{}").unwrap();
-                format!("{}", "{}")
-            }
-            Err(_) => {
-                create_dir(path.parent().unwrap()).unwrap();
-                let mut file = File::create(path.clone()).unwrap();
-                write!(file, "{}", "{}").unwrap();
-                format!("{}", "{}")
-            }
-        },
-    };
-
-    return from_str(json.as_str()).unwrap();
+    return from_str(
+        match file::read_string(path.clone()) {
+            Ok(config) => config,
+            Err(_err) => match File::create(path.clone()) {
+                Ok(mut file) => {
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+                Err(_) => {
+                    create_dir(path.parent().unwrap()).unwrap();
+                    let mut file = File::create(path.clone()).unwrap();
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+            },
+        }
+        .as_str(),
+    )
+    .unwrap();
 }
 
 fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
