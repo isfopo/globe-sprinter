@@ -88,42 +88,38 @@ fn main() {
             })
         })
         .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => {
-                let path = get_config_path(app);
-
-                match id.as_str() {
-                    "config" => {
-                        Command::new("open")
-                            .arg(path)
-                            .output()
-                            .expect("failed to execute process");
-                    }
-                    "open" => {
-                        if let Some(window) = app.get_window("main") {
-                            window.show().unwrap();
-                        } else {
-                            println!("no window");
-                        }
-                    }
-                    "hide" => {
-                        let window = app.get_window("main").unwrap();
-                        window.hide().unwrap();
-                    }
-                    "quit" => {
-                        std::process::exit(0);
-                    }
-                    id => {
-                        app.clipboard_manager()
-                            .write_text(id)
-                            .expect("failed to copy");
-
-                        Command::new("open")
-                            .arg("/bin/zsh")
-                            .output()
-                            .expect("failed to execute process");
+            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "config" => {
+                    Command::new("open")
+                        .arg(get_config_path(app))
+                        .output()
+                        .expect("failed to execute process");
+                }
+                "open" => {
+                    if let Some(window) = app.get_window("main") {
+                        window.show().unwrap();
+                    } else {
+                        println!("no window");
                     }
                 }
-            }
+                "hide" => {
+                    let window = app.get_window("main").unwrap();
+                    window.hide().unwrap();
+                }
+                "quit" => {
+                    std::process::exit(0);
+                }
+                id => {
+                    app.clipboard_manager()
+                        .write_text(id)
+                        .expect("failed to copy");
+
+                    Command::new("open")
+                        .arg("/bin/zsh")
+                        .output()
+                        .expect("failed to execute process");
+                }
+            },
             _ => {}
         })
         .build(tauri::generate_context!())
