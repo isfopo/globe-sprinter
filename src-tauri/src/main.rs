@@ -69,7 +69,6 @@ fn generate_menu_entry(key: &String, value: &Value) -> SystemTrayMenuEntry {
     match value.as_str() {
         Some(value) => SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(value, key)),
         None => {
-            println!("{}", key);
             let mut submenu = SystemTrayMenu::new();
 
             for (sub_key, sub_value) in value.as_object().unwrap().into_iter().rev() {
@@ -87,9 +86,6 @@ fn main() {
         .setup(|app| {
             Ok({
                 let handle = app.handle();
-
-                let run_menu = SystemTrayMenu::new().add_item(CustomMenuItem::new("run", "Run"));
-                let sub_menu = SystemTraySubmenu::new("Sub", run_menu);
 
                 let config = get_config(get_config_path(&app.handle()));
 
