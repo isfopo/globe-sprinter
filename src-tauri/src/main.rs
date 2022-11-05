@@ -91,15 +91,6 @@ fn main() {
             SystemTrayEvent::MenuItemClick { id, .. } => {
                 let path = get_config_path(app);
 
-                app.clipboard_manager()
-                    .write_text(id.as_str())
-                    .expect("failed to copy");
-
-                Command::new("open")
-                    .arg("/bin/zsh")
-                    .output()
-                    .expect("failed to execute process");
-
                 match id.as_str() {
                     "config" => {
                         Command::new("open")
@@ -121,7 +112,16 @@ fn main() {
                     "quit" => {
                         std::process::exit(0);
                     }
-                    _ => {}
+                    id => {
+                        app.clipboard_manager()
+                            .write_text(id)
+                            .expect("failed to copy");
+
+                        Command::new("open")
+                            .arg("/bin/zsh")
+                            .output()
+                            .expect("failed to execute process");
+                    }
                 }
             }
             _ => {}
