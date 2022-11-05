@@ -13,7 +13,7 @@ use std::{
 use tauri::api::file;
 use tauri::{
     AppHandle, ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
-    SystemTrayMenu, SystemTraySubmenu,
+    SystemTrayMenu, SystemTrayMenuItem, SystemTraySubmenu,
 };
 use tauri_runtime::menu::SystemTrayMenuEntry;
 
@@ -62,7 +62,8 @@ fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
             )))
     }
 
-    menu.add_item(CustomMenuItem::new("config", "Configure"))
+    menu.add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(CustomMenuItem::new("config", "Configure"))
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"))
