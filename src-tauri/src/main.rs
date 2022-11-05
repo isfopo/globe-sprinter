@@ -68,7 +68,16 @@ fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
 fn generate_menu_entry(key: &String, value: &Value) -> SystemTrayMenuEntry {
     match value.as_str() {
         Some(value) => SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(value, key)),
-        None => SystemTrayMenuEntry::CustomItem(CustomMenuItem::new("value", "key")),
+        None => {
+            println!("{}", key);
+            let mut submenu = SystemTrayMenu::new();
+
+            for (sub_key, sub_value) in value.as_object().unwrap().into_iter().rev() {
+                submenu.items.push(generate_menu_entry(sub_key, sub_value))
+            }
+
+            SystemTrayMenuEntry::Submenu(SystemTraySubmenu::new(key, submenu))
+        }
     }
 }
 
