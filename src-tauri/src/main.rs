@@ -90,33 +90,17 @@ fn main() {
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => {
                 let path = get_config_path(app);
-                let config = get_config(path.clone());
 
-                match config.as_object().unwrap().get(id.as_str()) {
-                    Some(value) => {
-                        app.clipboard_manager()
-                            .write_text(value.as_str().unwrap())
-                            .expect("failed to copy");
+                app.clipboard_manager()
+                    .write_text(id.as_str())
+                    .expect("failed to copy");
 
-                        Command::new("open")
-                            .arg("/bin/zsh")
-                            .output()
-                            .expect("failed to execute process");
-                    }
-                    None => {}
-                }
+                Command::new("open")
+                    .arg("/bin/zsh")
+                    .output()
+                    .expect("failed to execute process");
 
                 match id.as_str() {
-                    "run" => {
-                        app.clipboard_manager()
-                            .write_text("ls")
-                            .expect("failed to copy");
-
-                        Command::new("open")
-                            .arg("/bin/zsh")
-                            .output()
-                            .expect("failed to execute process");
-                    }
                     "config" => {
                         Command::new("open")
                             .arg(path)
