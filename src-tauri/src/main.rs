@@ -67,14 +67,6 @@ fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
 }
 
 fn main() {
-    // read config file, create if doesn't exists
-
-    // turn file into object
-
-    // add folders and commands as submenus and items, respectively
-
-    // add open, hide and quit items
-
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
