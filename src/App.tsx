@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
+import { useConfig } from "./assets/hooks/useConfig";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const config = useConfig();
 
   return (
     <div className="container">
@@ -20,12 +16,11 @@ function App() {
             onChange={(e) => setName(e.currentTarget.value)}
             placeholder="Enter a name..."
           />
-          <button type="button" onClick={() => greet()}>
+          <button type="button" onClick={() => {}}>
             Greet
           </button>
         </div>
       </div>
-      <p>{greetMsg}</p>
     </div>
   );
 }

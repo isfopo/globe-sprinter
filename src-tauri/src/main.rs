@@ -7,7 +7,6 @@ mod commands;
 mod config;
 mod menu;
 
-use commands::greet;
 use config::{get_config, get_config_path};
 use menu::generate_menu;
 
@@ -73,7 +72,7 @@ fn main() {
     };
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![commands::get_config])
         .setup(setup)
         .on_system_tray_event(system_tray_event)
         .build(tauri::generate_context!())
