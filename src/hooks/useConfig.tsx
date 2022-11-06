@@ -6,10 +6,10 @@ export interface Config {
 }
 
 export const useConfig = (): {
-  config: Config | undefined;
+  config: Config;
   loading: boolean;
 } => {
-  const [config, setConfig] = useState<Config>();
+  const [config, setConfig] = useState<Config>({});
 
   useEffect(() => {
     const get = async () => {
@@ -18,7 +18,5 @@ export const useConfig = (): {
     get();
   }, []);
 
-  console.log(config);
-
-  return { config, loading: !config };
+  return { config, loading: Object.keys(config).length === 0 };
 };
