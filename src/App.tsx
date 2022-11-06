@@ -1,28 +1,21 @@
 import { useState } from "react";
 import "./App.css";
-import { useConfig } from "./assets/hooks/useConfig";
+import { ConfigList } from "./components/lists/ConfigList";
+import { useConfig } from "./hooks/useConfig";
 
-function App() {
-  const [name, setName] = useState("");
+export default () => {
+  const { config, loading } = useConfig();
 
-  const config = useConfig();
+  if (loading) {
+    return <></>;
+  }
 
   return (
     <div className="container">
       <div className="row">
-        <div>
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
-          />
-          <button type="button" onClick={() => {}}>
-            Greet
-          </button>
-        </div>
+        <p>Configs:</p>
+        <ConfigList config={config} />
       </div>
     </div>
   );
-}
-
-export default App;
+};
