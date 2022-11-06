@@ -13,7 +13,6 @@ export default () => {
   return (
     <div className="container">
       <div className="row">
-        <p>Configs:</p>
         <ConfigList config={config} />
       </div>
     </div>
