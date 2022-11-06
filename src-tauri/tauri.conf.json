@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "sprinter",
+    "productName": "Globe Sprinter",
     "version": "0.0.0"
   },
   "tauri": {
@@ -61,7 +61,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "sprinter",
+        "title": "Globe Sprinter",
         "width": 800
       }
     ]
