@@ -3,17 +3,15 @@
     windows_subsystem = "windows"
 )]
 
-use serde_json::{from_str, Map, Value};
-use std::path::PathBuf;
+mod config;
+
+use config::{get_config, get_config_path};
+
+use serde_json::{Map, Value};
 use std::process::Command;
-use std::{
-    fs::{create_dir, File},
-    io::Write,
-};
-use tauri::api::file;
 use tauri::{
-    AppHandle, ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent,
-    SystemTrayMenu, SystemTrayMenuItem, SystemTraySubmenu,
+    ClipboardManager, CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu,
+    SystemTrayMenuItem, SystemTraySubmenu,
 };
 use tauri_runtime::menu::SystemTrayMenuEntry;
 
@@ -21,34 +19,6 @@ use tauri_runtime::menu::SystemTrayMenuEntry;
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
-fn get_config_path(app: &AppHandle) -> PathBuf {
-    let mut path = app.path_resolver().app_dir().unwrap();
-    path.push("config.json");
-    return path;
-}
-
-fn get_config(path: PathBuf) -> Value {
-    return from_str(
-        match file::read_string(path.clone()) {
-            Ok(config) => config,
-            Err(_err) => match File::create(path.clone()) {
-                Ok(mut file) => {
-                    write!(file, "{}", "{}").unwrap();
-                    format!("{}", "{}")
-                }
-                Err(_) => {
-                    create_dir(path.parent().unwrap()).unwrap();
-                    let mut file = File::create(path.clone()).unwrap();
-                    write!(file, "{}", "{}").unwrap();
-                    format!("{}", "{}")
-                }
-            },
-        }
-        .as_str(),
-    )
-    .unwrap();
 }
 
 fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
