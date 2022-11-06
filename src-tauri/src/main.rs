@@ -3,20 +3,16 @@
     windows_subsystem = "windows"
 )]
 
+mod commands;
 mod config;
 mod menu;
 
+use commands::greet;
 use config::{get_config, get_config_path};
 use menu::generate_menu;
 
 use std::process::Command;
 use tauri::{ClipboardManager, Manager, SystemTray, SystemTrayEvent};
-
-// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
 
 fn main() {
     tauri::Builder::default()
