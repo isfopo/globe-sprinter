@@ -47,7 +47,7 @@
 }
 
 .expanded {
-  span svg:last-child {
+  span > svg:last-child {
     transform: rotate(-90deg);
   }
 }
