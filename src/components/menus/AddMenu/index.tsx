@@ -9,7 +9,11 @@ export interface AddMenuProps {}
 export const AddMenu: React.FC<AddMenuProps> = () => {
   return (
     <div className={styles["container"]}>
-      <Menu menuButton={<MenuButton>{<Add />}</MenuButton>}>
+      <Menu
+        menuButton={<MenuButton>{<Add />}</MenuButton>}
+        arrow
+        direction="left"
+      >
         <MenuItem>New Directory</MenuItem>
         <MenuItem>New Command</MenuItem>
       </Menu>
