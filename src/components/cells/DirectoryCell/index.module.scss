@@ -28,10 +28,22 @@
     padding: 0.6em 1.2em;
   }
 
-  span svg {
-    width: 4rem;
-    height: auto;
-    color: $off-white;
+  span {
+    display: flex;
+    align-items: center;
+    svg {
+      width: 3rem;
+      margin-right: 1rem;
+      transition: transform 0.5s;
+      cursor: pointer;
+      height: auto;
+      color: $off-white;
+    }
   }
 }
+
+.expanded {
+  span svg {
+    transform: rotate(-90deg);
+  }
 }
