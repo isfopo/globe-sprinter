@@ -31,19 +31,25 @@
   span {
     display: flex;
     align-items: center;
+    margin-right: 1rem;
+    gap: 1rem;
+
     svg {
-      width: 3rem;
-      margin-right: 1rem;
+      width: 1.5rem;
       transition: transform 0.5s;
       cursor: pointer;
       height: auto;
       color: $off-white;
     }
+
+    svg:last-child {
+      width: 3rem;
+    }
   }
 }
 
 .expanded {
-  span svg {
+  span svg:last-child {
     transform: rotate(-90deg);
   }
 }

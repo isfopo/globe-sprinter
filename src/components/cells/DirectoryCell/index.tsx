@@ -19,7 +19,8 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
   >
     <p>{title}</p>
     <span onClick={onClick}>
-      <Arrow />
+    <span>
+      <Add />
     </span>
   </div>
 );
