@@ -1,16 +1,17 @@
 import { ReactComponent as Arrow } from "../../../assets/icons/arrow.svg";
+import { ReactComponent as Add } from "../../../assets/icons/add.svg";
 import styles from "./index.module.scss";
 
 export interface DirectoryCellProps {
   title: string;
   isExpanded: boolean;
-  onClick: () => void;
+  expand: () => void;
 }
 
 export const DirectoryCell: React.FC<DirectoryCellProps> = ({
   title,
   isExpanded,
-  onClick,
+  expand,
 }) => (
   <div
     className={`${styles["container"]}  ${
@@ -18,9 +19,9 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
     }`}
   >
     <p>{title}</p>
-    <span onClick={onClick}>
     <span>
       <Add />
+      <Arrow onClick={expand} />
     </span>
   </div>
 );

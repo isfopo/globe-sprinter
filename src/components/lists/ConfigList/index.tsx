@@ -29,7 +29,7 @@ export const ConfigList: React.FC<ConfigListProps> = ({ config, isChild }) => {
               <DirectoryCell
                 title={title}
                 isExpanded={isExpanded}
-                onClick={() => setIsExpanded((e) => !e)}
+                expand={() => setIsExpanded((e) => !e)}
               />
               {isExpanded && (
                 <ConfigList config={config[title] as Config} isChild={true} />
