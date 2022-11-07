@@ -1,3 +1,4 @@
+import Arrow from "../../../assets/icons/arrow.svg";
 import styles from "./index.module.scss";
 
 export interface DirectoryCellProps {
@@ -11,6 +12,8 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
 }) => (
   <div className={styles["container"]}>
     <p>{title}</p>
-    <p onClick={onClick}>v</p>
+    <span onClick={onClick}>
+      <img src={Arrow} alt="expand" />
+    </span>
   </div>
 );
