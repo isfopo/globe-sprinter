@@ -26,6 +26,8 @@
   p {
     color: $off-white;
     padding: 0.6em 1.2em;
+    cursor: default;
+    user-select: none;
   }
 
   span {
@@ -35,14 +37,10 @@
     gap: 1rem;
 
     svg {
-      width: 1.5rem;
       transition: transform 0.5s;
       cursor: pointer;
       height: auto;
       color: $off-white;
-    }
-
-    svg:last-child {
       width: 3rem;
     }
   }

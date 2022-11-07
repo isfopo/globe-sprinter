@@ -1,5 +1,5 @@
 import { ReactComponent as Arrow } from "../../../assets/icons/arrow.svg";
-import { ReactComponent as Add } from "../../../assets/icons/add.svg";
+import { AddMenu } from "../../menus/AddMenu";
 import styles from "./index.module.scss";
 
 export interface DirectoryCellProps {
@@ -20,7 +20,7 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
   >
     <p>{title}</p>
     <span>
-      <Add />
+      <AddMenu />
       <Arrow onClick={expand} />
     </span>
   </div>
