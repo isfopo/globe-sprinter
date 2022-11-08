@@ -22,7 +22,7 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
   >
     <p>{title}</p>
     <span>
-      <AddMenu />
+      <AddMenu location={location} />
       <Arrow onClick={expand} />
     </span>
   </div>
