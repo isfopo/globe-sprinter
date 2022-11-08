@@ -6,12 +6,14 @@ import styles from "./index.module.scss";
 
 export interface ConfigListProps {
   config: Config;
+  location?: string;
   isChild?: boolean;
   hide?: boolean;
 }
 
 export const ConfigList: React.FC<ConfigListProps> = ({
   config,
+  location = "",
   isChild,
   hide,
 }) => {
@@ -38,12 +40,14 @@ export const ConfigList: React.FC<ConfigListProps> = ({
             <>
               <DirectoryCell
                 title={title}
+                location={location}
                 isExpanded={isExpanded}
                 expand={() => setIsExpanded((e) => !e)}
               />
               <ConfigList
                 config={config[title] as Config}
                 isChild={true}
+                location={`${location}/${title}`}
                 hide={!isExpanded}
               />
             </>

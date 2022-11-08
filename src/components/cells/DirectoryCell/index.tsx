@@ -5,12 +5,14 @@ import styles from "./index.module.scss";
 export interface DirectoryCellProps {
   title: string;
   isExpanded: boolean;
+  location: string;
   expand: () => void;
 }
 
 export const DirectoryCell: React.FC<DirectoryCellProps> = ({
   title,
   isExpanded,
+  location,
   expand,
 }) => (
   <div

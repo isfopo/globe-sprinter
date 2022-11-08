@@ -4,7 +4,9 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { ReactComponent as Add } from "../../../assets/icons/add.svg";
 
-export interface AddMenuProps {}
+export interface AddMenuProps {
+  location: string;
+}
 
 export const AddMenu: React.FC<AddMenuProps> = () => {
   return (
