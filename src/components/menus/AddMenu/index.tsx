@@ -16,8 +16,8 @@ export const AddMenu: React.FC<AddMenuProps> = () => {
         arrow
         direction="left"
       >
-        <MenuItem>New Directory</MenuItem>
-        <MenuItem>New Command</MenuItem>
+        <MenuItem>Add Directory</MenuItem>
+        <MenuItem>Add Command</MenuItem>
       </Menu>
     </div>
   );
