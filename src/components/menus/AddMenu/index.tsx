@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import { ReactComponent as Add } from "../../../assets/icons/add.svg";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
-import { ReactComponent as Add } from "../../../assets/icons/add.svg";
 
 export interface AddMenuProps {
   location: string;
