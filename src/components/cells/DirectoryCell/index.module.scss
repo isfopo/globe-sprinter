@@ -18,6 +18,10 @@
   flex-direction: row;
   justify-content: space-between;
 
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
   @media (prefers-color-scheme: dark) {
     color: $white;
     background-color: #0f0f0f98;
@@ -30,17 +34,20 @@
     user-select: none;
   }
 
+  svg {
+    cursor: pointer;
+    height: auto;
+    color: $off-white;
+  }
+
   span {
     display: flex;
     align-items: center;
     margin-right: 1rem;
     gap: 1rem;
 
-    svg {
+    > svg {
       transition: transform 0.5s;
-      cursor: pointer;
-      height: auto;
-      color: $off-white;
       width: 3rem;
     }
   }

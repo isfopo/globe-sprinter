@@ -7,13 +7,22 @@ import styles from "./index.module.scss";
 export interface ConfigListProps {
   config: Config;
   isChild?: boolean;
+  hide?: boolean;
 }
 
-export const ConfigList: React.FC<ConfigListProps> = ({ config, isChild }) => {
+export const ConfigList: React.FC<ConfigListProps> = ({
+  config,
+  isChild,
+  hide,
+}) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
-    <div className={`${styles["container"]} ${isChild ? styles["child"] : ""}`}>
+    <div
+      className={`${styles["container"]} ${
+        isExpanded ? styles["expanded"] : ""
+      } ${isChild ? styles["child"] : ""}`}
+    >
       {Object.keys(config).map((title, key) => {
         if (typeof config[title] === "string") {
           return (
@@ -21,6 +30,7 @@ export const ConfigList: React.FC<ConfigListProps> = ({ config, isChild }) => {
               title={title}
               command={config[title] as string}
               key={key}
+              hide={hide}
             />
           );
         } else {
@@ -31,9 +41,11 @@ export const ConfigList: React.FC<ConfigListProps> = ({ config, isChild }) => {
                 isExpanded={isExpanded}
                 expand={() => setIsExpanded((e) => !e)}
               />
-              {isExpanded && (
-                <ConfigList config={config[title] as Config} isChild={true} />
-              )}
+              <ConfigList
+                config={config[title] as Config}
+                isChild={true}
+                hide={!isExpanded}
+              />
             </>
           );
         }
