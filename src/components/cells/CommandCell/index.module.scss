@@ -35,9 +35,9 @@
     margin-bottom: 1rem;
   }
 
-  transition: opacity $transition-rate ease-in,
-    transform $transition-rate ease-in, max-height $transition-rate ease-out,
-    margin-bottom $transition-rate;
+  transition: opacity calc($transition-rate / 2) ease-in,
+    transform calc($transition-rate / 2) ease-in,
+    max-height $transition-rate ease-out, margin-bottom $transition-rate;
 }
 
 .hide {
