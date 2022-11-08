@@ -36,7 +36,8 @@
   }
 
   transition: opacity $transition-rate ease-in,
-    transform $transition-rate ease-in, max-height $transition-rate ease-out;
+    transform $transition-rate ease-in, max-height $transition-rate ease-out,
+    margin-bottom $transition-rate;
 }
 
 .hide {
@@ -44,5 +45,4 @@
   transform: scaleY(0);
   max-height: 0;
   margin-bottom: 0 !important;
-  border: 0;
 }
