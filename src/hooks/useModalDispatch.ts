@@ -3,7 +3,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { modalsState } from "../state/atoms/ModalsState";
 
 export const useModalDispatch = () => {
-  const [modals, setModals] = useRecoilState(modalsState);
+  const setModals = useSetRecoilState(modalsState);
 
   const openModal = useCallback(
     (modal: string) => {

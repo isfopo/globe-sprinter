@@ -22,7 +22,9 @@ export const AddMenu: React.FC<AddMenuProps> = () => {
         <MenuItem onClick={() => openModal("AddDirectoryModal")}>
           Add Directory
         </MenuItem>
-        <MenuItem>Add Command</MenuItem>
+        <MenuItem onClick={() => openModal("AddCommandModal")}>
+          Add Command
+        </MenuItem>
       </Menu>
     </div>
   );
