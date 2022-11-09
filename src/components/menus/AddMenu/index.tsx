@@ -9,7 +9,7 @@ export interface AddMenuProps {
   location: string;
 }
 
-export const AddMenu: React.FC<AddMenuProps> = () => {
+export const AddMenu: React.FC<AddMenuProps> = ({ location }) => {
   const openModal = useModalDispatch();
 
   return (
@@ -19,10 +19,10 @@ export const AddMenu: React.FC<AddMenuProps> = () => {
         arrow
         direction="left"
       >
-        <MenuItem onClick={() => openModal("AddDirectoryModal")}>
+        <MenuItem onClick={() => openModal("AddDirectoryModal", { location })}>
           Add Directory
         </MenuItem>
-        <MenuItem onClick={() => openModal("AddCommandModal")}>
+        <MenuItem onClick={() => openModal("AddCommandModal", { location })}>
           Add Command
         </MenuItem>
       </Menu>

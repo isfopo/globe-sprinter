@@ -4,11 +4,13 @@ import { ModalBase } from "./ModalBase";
 
 export const AddDirectoryModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const remove = useModalListener(
+  const { remove, args } = useModalListener(
     "AddDirectoryModal",
     () => setIsOpen(true),
     () => setIsOpen(false)
   );
+
+  console.log(args);
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={remove}>

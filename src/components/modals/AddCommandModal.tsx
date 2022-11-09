@@ -4,7 +4,7 @@ import { ModalBase } from "./ModalBase";
 
 export const AddCommandModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const remove = useModalListener(
+  const { remove } = useModalListener(
     "AddCommandModal",
     () => setIsOpen(true),
     () => setIsOpen(false)
