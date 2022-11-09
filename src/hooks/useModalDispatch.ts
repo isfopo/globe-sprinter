@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { modalsState } from "../state/atoms/ModalsState";
 
 export const useModalDispatch = () => {
