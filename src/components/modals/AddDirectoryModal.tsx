@@ -1,14 +1,18 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
 
 export const AddDirectoryModal = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-
-  const toggle = useCallback(() => setIsOpen((o) => !o), []);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const remove = useModalListener(
+    "AddDirectoryModal",
+    () => setIsOpen(true),
+    () => setIsOpen(false)
+  );
 
   return (
-    <ModalBase isOpen={isOpen} onRequestClose={toggle}>
-      <p>Heellllooooo</p>
+    <ModalBase isOpen={isOpen} onRequestClose={remove}>
+      <p>Add Directory</p>
     </ModalBase>
   );
 };

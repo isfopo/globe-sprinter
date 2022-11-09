@@ -3,12 +3,15 @@ import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import { ReactComponent as Add } from "../../../assets/icons/add.svg";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
+import { useModalDispatch } from "../../../hooks/useModalDispatch";
 
 export interface AddMenuProps {
   location: string;
 }
 
 export const AddMenu: React.FC<AddMenuProps> = () => {
+  const openModal = useModalDispatch();
+
   return (
     <div className={styles["container"]}>
       <Menu
@@ -16,7 +19,9 @@ export const AddMenu: React.FC<AddMenuProps> = () => {
         arrow
         direction="left"
       >
-        <MenuItem>Add Directory</MenuItem>
+        <MenuItem onClick={() => openModal("AddDirectoryModal")}>
+          Add Directory
+        </MenuItem>
         <MenuItem>Add Command</MenuItem>
       </Menu>
     </div>

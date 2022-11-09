@@ -1,3 +1,4 @@
+import React from "react";
 import Modal from "react-modal";
 import {
   black,
@@ -33,10 +34,8 @@ export const ModalBase: React.FC<ModalBaseProps> = ({
   children,
   isOpen,
   onRequestClose,
-}) => {
-  return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
-      {children}
-    </Modal>
-  );
-};
+}) => (
+  <Modal isOpen={isOpen} onRequestClose={onRequestClose} style={customStyles}>
+    {children}
+  </Modal>
+);
