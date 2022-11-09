@@ -2,6 +2,7 @@ import styles from "./App.module.scss";
 import { ConfigList } from "./components/lists/ConfigList";
 import { AddMenu } from "./components/menus/AddMenu";
 import { AddDirectoryModal } from "./components/modals/AddDirectoryModal";
+import { Modals } from "./components/modals/Modals";
 import { useConfig } from "./hooks/useConfig";
 
 export default () => {
@@ -13,9 +14,7 @@ export default () => {
 
   return (
     <div className={styles["container"]}>
-      <div>
-        <AddDirectoryModal />
-      </div>
+      <Modals />
       <div className={styles["menu"]}>
         <AddMenu location="/" />
       </div>
