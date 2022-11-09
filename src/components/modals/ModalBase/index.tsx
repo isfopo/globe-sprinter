@@ -1,4 +1,8 @@
 import Modal from "react-modal";
+import {
+  black,
+  offwhite as offWhite,
+} from "../../../styles/_colors.module.scss";
 
 Modal.setAppElement("#root");
 
@@ -13,8 +17,8 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    color: "#000",
-    backgroundColor: "#f6f6f6",
+    color: black,
+    backgroundColor: offWhite,
     boxShadow: "0 0 100px rgba(0, 0, 0, 1)",
   },
 };
