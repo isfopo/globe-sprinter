@@ -1,4 +1,4 @@
-@use "../../../styles/colors" as *;
+@use "../../../styles/colors.module.scss" as *;
 
 .container {
   border-radius: 8px;
@@ -28,7 +28,7 @@
   }
 
   p {
-    color: $off-white;
+    color: $offwhite;
     padding: 0.6em 1.2em;
     cursor: default;
     user-select: none;
@@ -37,7 +37,7 @@
   svg {
     cursor: pointer;
     height: auto;
-    color: $off-white;
+    color: $offwhite;
   }
 
   span {

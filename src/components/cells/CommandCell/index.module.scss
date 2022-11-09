@@ -1,4 +1,4 @@
-@use "../../../styles/colors" as *;
+@use "../../../styles/colors.module.scss" as *;
 @use "../../../styles/variables" as *;
 
 .container {
@@ -24,7 +24,7 @@
   }
 
   p {
-    color: $off-white;
+    color: $offwhite;
     padding: 0.6em 1.2em;
     cursor: default;
   }
