@@ -23,5 +23,5 @@ export const useModalListener = <T>(
     setModals((m) => m.filter((n) => n.id !== id));
   }, [setModals]);
 
-  return { remove, args: args as T };
+  return { remove, args: (args ?? {}) as T };
 };
