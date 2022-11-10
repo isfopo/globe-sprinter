@@ -18,10 +18,13 @@ export const AddDirectoryModal = () => {
     () => setIsOpen(false)
   );
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
-    alert(`The name you entered was: ${name}`);
-  };
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
+    (event) => {
+      event.preventDefault();
+      alert(`The name you entered was: ${name}`);
+    },
+    [name]
+  );
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={remove}>
