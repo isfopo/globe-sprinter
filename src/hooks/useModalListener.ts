@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { modalsState } from "../state/modalsState";
 
-export const useModalListener = (
+export const useModalListener = <T>(
   id: string,
   onOpen: () => void,
   onRemove: () => void
@@ -23,5 +23,5 @@ export const useModalListener = (
     setModals((m) => m.filter((n) => n.id !== id));
   }, [setModals]);
 
-  return { remove, args };
+  return { remove, args: args as T };
 };
