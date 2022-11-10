@@ -30,3 +30,8 @@ pub fn get_config(app_handle: AppHandle) -> String {
         }
     }
 }
+
+#[tauri::command]
+pub fn add_directory(location: String, name: String) {
+    println!("{}: {}", location, name);
+}

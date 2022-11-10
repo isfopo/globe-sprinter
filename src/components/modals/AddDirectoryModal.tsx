@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
+import { invoke } from "@tauri-apps/api/tauri";
 
 export interface AddDirectoryArgs {
   location: string;
@@ -21,7 +22,7 @@ export const AddDirectoryModal = () => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
     (event) => {
       event.preventDefault();
-      alert(`The name you entered was: ${name}`);
+      invoke("add_directory", { location, name });
     },
     [name]
   );

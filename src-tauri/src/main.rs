@@ -72,7 +72,10 @@ fn main() {
     };
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![commands::get_config])
+        .invoke_handler(tauri::generate_handler![
+            commands::get_config,
+            commands::add_directory
+        ])
         .setup(setup)
         .on_system_tray_event(system_tray_event)
         .build(tauri::generate_context!())
