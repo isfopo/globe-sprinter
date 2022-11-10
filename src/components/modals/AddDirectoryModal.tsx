@@ -26,8 +26,13 @@ export const AddDirectoryModal = () => {
     [name]
   );
 
+  const handleRequestClose = useCallback(() => {
+    setName("");
+    remove();
+  }, [setName, remove]);
+
   return (
-    <ModalBase isOpen={isOpen} onRequestClose={remove}>
+    <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
       <form onSubmit={handleSubmit}>
         <label>
           Enter your name:
