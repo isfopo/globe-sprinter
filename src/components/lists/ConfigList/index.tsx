@@ -40,7 +40,7 @@ export const ConfigList: React.FC<ConfigListProps> = ({
             <>
               <DirectoryCell
                 title={title}
-                location={location}
+                location={`${location}/${title}`}
                 isExpanded={isExpanded}
                 expand={() => setIsExpanded((e) => !e)}
               />
