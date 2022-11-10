@@ -12,7 +12,7 @@ pub fn get_config_path(app: &AppHandle) -> PathBuf {
     return path;
 }
 
-pub fn get_config(path: PathBuf) -> Value {
+pub fn parse_config(path: PathBuf) -> Value {
     return from_str(
         match file::read_string(path.clone()) {
             Ok(config) => config,
