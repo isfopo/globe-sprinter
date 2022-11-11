@@ -2527,6 +2527,7 @@ name = "sprinter"
 version = "0.0.0"
 dependencies = [
  "serde",
+ "serde_derive",
  "serde_json",
  "tauri",
  "tauri-build",
