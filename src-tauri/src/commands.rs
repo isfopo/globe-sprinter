@@ -1,3 +1,5 @@
+use serde_derive::{Deserialize, Serialize};
+use serde_json::{from_str, Value};
 use std::{
     fs::{create_dir, File},
     io::Write,
@@ -30,6 +32,18 @@ pub fn get_config(app_handle: AppHandle) -> String {
         }
     }
 }
+
+use std::collections::BTreeMap;
+
+// https://stackoverflow.com/questions/33895090/serialize-json-in-a-recursive-struct
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(untagged)]
+enum Config {
+    String(String),
+    Directory(Directory),
+}
+
+type Directory = BTreeMap<String, Config>;
 
 #[tauri::command]
 pub fn add_directory(location: String, name: String) {
