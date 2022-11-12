@@ -1,4 +1,4 @@
-use serde_derive::{Deserialize, Serialize};
+use crate::config::Config;
 use serde_json::{from_str, Value};
 use std::{
     fs::{create_dir, File},
@@ -33,18 +33,6 @@ pub fn get_config(app_handle: AppHandle) -> String {
     }
 }
 
-use std::collections::BTreeMap;
-
-// https://stackoverflow.com/questions/33895090/serialize-json-in-a-recursive-struct
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
-enum Config {
-    String(String),
-    Directory(Directory),
-}
-
-type Directory = BTreeMap<String, Config>;
-
 #[tauri::command]
 pub fn add_directory(app_handle: AppHandle, location: String, name: String) {
     let mut path = app_handle.path_resolver().app_data_dir().unwrap();
@@ -67,6 +55,4 @@ pub fn add_directory(app_handle: AppHandle, location: String, name: String) {
     };
 
     let config = serde_json::from_str::<Config>(&json).unwrap();
-
-    match config {}
 }
