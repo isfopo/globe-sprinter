@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
+import { readConfig } from "../../helpers/file";
 import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
-import { invoke } from "@tauri-apps/api/tauri";
 
 export interface AddDirectoryArgs {
   location: string;
@@ -20,9 +20,11 @@ export const AddDirectoryModal = () => {
   );
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
-      invoke("add_directory", { location, name });
+      const config = await readConfig();
+
+      console.log(config);
     },
     [name]
   );
