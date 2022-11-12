@@ -8,7 +8,7 @@ use tauri::{api::file, AppHandle};
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 #[tauri::command]
-pub fn get_config(app_handle: AppHandle) -> String {
+pub fn get_config_json(app_handle: AppHandle) -> String {
     let mut path = app_handle.path_resolver().app_data_dir().unwrap();
     path.push("config.json");
 

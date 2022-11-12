@@ -13,7 +13,7 @@ export const useConfig = (): {
 
   useEffect(() => {
     const get = async () => {
-      setConfig(JSON.parse(await invoke<string>("get_config")));
+      setConfig(JSON.parse(await invoke<string>("get_config_json")));
     };
     get();
   }, []);
