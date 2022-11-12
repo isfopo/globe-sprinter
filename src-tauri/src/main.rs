@@ -7,7 +7,7 @@ mod commands;
 mod config;
 mod menu;
 
-use config::{get_config_path, parse_config};
+use config::{get_config, get_config_path, parse_config};
 use menu::generate_menu;
 
 use std::process::Command;
@@ -18,11 +18,11 @@ fn main() {
         Ok({
             let handle = app.handle();
 
-            let config = parse_config(get_config_path(&app.handle()));
+            let config = get_config(&handle);
 
             SystemTray::new()
                 .with_id("main")
-                .with_menu(generate_menu(config.as_object().unwrap()))
+                .with_menu(generate_menu(config))
                 .build(&handle)
                 .expect("unable to create tray");
         })
