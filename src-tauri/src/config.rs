@@ -7,7 +7,7 @@ use std::{
 use tauri::{api::file, AppHandle};
 
 pub fn get_config_path(app: &AppHandle) -> PathBuf {
-    let mut path = app.path_resolver().app_dir().unwrap();
+    let mut path = app.path_resolver().app_data_dir().unwrap();
     path.push("config.json");
     return path;
 }

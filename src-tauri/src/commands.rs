@@ -10,7 +10,7 @@ use tauri::{api::file, AppHandle};
 
 #[tauri::command]
 pub fn get_config(app_handle: AppHandle) -> String {
-    let mut path = app_handle.path_resolver().app_dir().unwrap();
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
     path.push("config.json");
 
     match file::read_string(path.clone()) {
@@ -47,7 +47,7 @@ type Directory = BTreeMap<String, Config>;
 
 #[tauri::command]
 pub fn add_directory(app_handle: AppHandle, location: String, name: String) {
-    let mut path = app_handle.path_resolver().app_dir().unwrap();
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
     path.push("config.json");
 
     let json = match file::read_string(path.clone()) {
