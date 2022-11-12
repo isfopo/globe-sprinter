@@ -7,7 +7,7 @@ mod commands;
 mod config;
 mod menu;
 
-use config::{get_config, get_config_path, parse_config};
+use config::{get_config, get_config_path};
 use menu::generate_menu;
 
 use std::process::Command;

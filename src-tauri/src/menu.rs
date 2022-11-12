@@ -1,7 +1,5 @@
-use std::collections::BTreeMap;
-
 use crate::config::{Config, ConfigItem};
-use serde_json::{Map, Value};
+use std::collections::BTreeMap;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTraySubmenu};
 use tauri_runtime::menu::SystemTrayMenuEntry;
 
