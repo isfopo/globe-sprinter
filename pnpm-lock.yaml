@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@szhsin/react-menu': ^3.2.1
-  '@tauri-apps/api': ^1.1.0
+  '@tauri-apps/api': ^1.2.0
   '@tauri-apps/cli': ^1.1.0
   '@types/node': ^18.7.10
   '@types/react': ^18.0.15
@@ -20,7 +20,7 @@ specifiers:
 
 dependencies:
   '@szhsin/react-menu': 3.2.1_biqbaboplfbrettd7655fr4n2y
-  '@tauri-apps/api': 1.1.0
+  '@tauri-apps/api': 1.2.0
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-modal: 3.16.1_biqbaboplfbrettd7655fr4n2y
@@ -484,9 +484,9 @@ packages:
       react-transition-state: 1.1.5_biqbaboplfbrettd7655fr4n2y
     dev: false
 
-  /@tauri-apps/api/1.1.0:
-    resolution: {integrity: sha512-n13pIqdPd3KtaMmmAcrU7BTfdMtIlGNnfZD0dNX8L4p8dgmuNyikm6JAA+yCpl9gqq6I8x5cV2Y0muqdgD0cWw==}
-    engines: {node: '>= 12.22.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+  /@tauri-apps/api/1.2.0:
+    resolution: {integrity: sha512-lsI54KI6HGf7VImuf/T9pnoejfgkNoXveP14pVV7XarrQ46rOejIVJLFqHI9sRReJMGdh2YuCoI3cc/yCWCsrw==}
+    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
     dev: false
 
   /@tauri-apps/cli-darwin-arm64/1.1.1:
