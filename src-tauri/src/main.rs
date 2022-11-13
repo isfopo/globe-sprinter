@@ -7,7 +7,7 @@ mod commands;
 mod config;
 mod menu;
 
-use commands::get_config_json;
+use commands::{get_config_json, write_config};
 use config::{get_config, get_config_path};
 use menu::generate_menu;
 
@@ -73,7 +73,7 @@ fn main() {
     };
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_config_json])
+        .invoke_handler(tauri::generate_handler![get_config_json, write_config])
         .setup(setup)
         .on_system_tray_event(system_tray_event)
         .build(tauri::generate_context!())

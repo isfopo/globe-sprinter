@@ -4,7 +4,7 @@ use std::{
     fs::{create_dir, File},
     io::Write,
 };
-use tauri::{api::file, AppHandle};
+use tauri::{api::file, AppHandle, Runtime};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
@@ -31,4 +31,10 @@ pub fn get_config_json(app_handle: AppHandle) -> String {
             }
         }
     }
+}
+
+#[tauri::command]
+pub fn write_config<R: Runtime>(app: tauri::AppHandle<R>, json: String) -> Result<(), String> {
+    println!("{}", json);
+    Ok(())
 }
