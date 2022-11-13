@@ -1,5 +1,6 @@
-use crate::config::Config;
+use crate::config::{get_config, Config, ConfigItem, Directory};
 use std::{
+    collections::BTreeMap,
     fs::{create_dir, File},
     io::Write,
 };
@@ -30,28 +31,4 @@ pub fn get_config_json(app_handle: AppHandle) -> String {
             }
         }
     }
-}
-
-#[tauri::command]
-pub fn add_directory(app_handle: AppHandle, location: String, name: String) {
-    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
-    path.push("config.json");
-
-    let json = match file::read_string(path.clone()) {
-        Ok(config) => config,
-        Err(_err) => match File::create(path.clone()) {
-            Ok(mut file) => {
-                write!(file, "{}", "{}").unwrap();
-                file::read_string(path.clone()).unwrap()
-            }
-            Err(_) => {
-                create_dir(path.parent().unwrap()).unwrap();
-                let mut file = File::create(path.clone()).unwrap();
-                write!(file, "{}", "{}").unwrap();
-                file::read_string(path.clone()).unwrap()
-            }
-        },
-    };
-
-    let config = serde_json::from_str::<Config>(&json).unwrap();
 }
