@@ -1,5 +1,7 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { configState } from "../state/configState";
 
 export interface Config {
   [key: string]: string | Config;
@@ -8,6 +10,7 @@ export interface Config {
 export const useConfig = (): {
   config: Config;
   loading: boolean;
+  insert: (location: string, key: string, command?: string) => void;
 } => {
   const [config, setConfig] = useState<Config>({});
 
@@ -18,5 +21,25 @@ export const useConfig = (): {
     get();
   }, []);
 
-  return { config, loading: Object.keys(config).length === 0 };
+  const insert = useCallback(
+    (location: string, key: string, command?: string) => {
+      const branch = location?.split("/").filter((step) => step) ?? [];
+
+      setConfig((config) => {
+        let place = config;
+        for (const step of branch) {
+          place = place[step] as Config;
+        }
+        place[key] = command ?? ({} as Config);
+        return config;
+      });
+    },
+    [setConfig]
+  );
+
+  useEffect(() => {
+    console.log(config);
+  }, [config]);
+
+  return { config, loading: Object.keys(config).length === 0, insert };
 };
