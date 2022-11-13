@@ -12,7 +12,7 @@ export const useConfig = (): {
   loading: boolean;
   insert: (location: string, key: string, command?: string) => void;
 } => {
-  const [config, setConfig] = useState<Config>({});
+  const [config, setConfig] = useRecoilState<Config>(configState);
 
   useEffect(() => {
     const get = async () => {
