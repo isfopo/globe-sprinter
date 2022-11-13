@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { readConfig } from "../../helpers/file";
+import { Config, useConfig } from "../../hooks/useConfig";
 import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
 
@@ -9,7 +10,7 @@ export interface AddDirectoryArgs {
 
 export const AddDirectoryModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [name, setName] = useState("");
+  const [key, setKey] = useState("");
   const {
     remove,
     args: { location },
@@ -19,20 +20,22 @@ export const AddDirectoryModal = () => {
     () => setIsOpen(false)
   );
 
+  const { config, loading, insert } = useConfig();
+
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
       event.preventDefault();
-      const config = await readConfig();
+      if (loading) return;
 
-      console.log(config);
+      insert(location, key);
     },
-    [name]
+    [key, loading, location]
   );
 
   const handleRequestClose = useCallback(() => {
-    setName("");
+    setKey("");
     remove();
-  }, [setName, remove]);
+  }, [setKey, remove]);
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
@@ -41,8 +44,8 @@ export const AddDirectoryModal = () => {
           Enter your name:
           <input
             type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={key}
+            onChange={(e) => setKey(e.target.value)}
           />
           <input type="submit" />
         </label>
