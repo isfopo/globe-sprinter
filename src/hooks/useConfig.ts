@@ -12,20 +12,14 @@ export const useConfig = (): {
   loading: boolean;
   insert: (location: string, key: string, command?: string) => void;
 } => {
-  const [config, setConfig] = useRecoilState<Config>(configState);
-
-  useEffect(() => {
-    const get = async () => {
-      setConfig(JSON.parse(await invoke<string>("get_config_json")));
-    };
-    get();
-  }, []);
+  const [config, setConfig] = useRecoilState(configState);
 
   const insert = useCallback(
     (location: string, key: string, command?: string) => {
       const branch = location?.split("/").filter((step) => step) ?? [];
 
       setConfig((config) => {
+        if (!config) return;
         let place = config;
         for (const step of branch) {
           place = place[step] as Config;
@@ -37,9 +31,5 @@ export const useConfig = (): {
     [setConfig]
   );
 
-  useEffect(() => {
-    console.log(config);
-  }, [config]);
-
-  return { config, loading: Object.keys(config).length === 0, insert };
+  return { config: config ?? {}, loading: !config, insert };
 };
