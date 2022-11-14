@@ -1,6 +1,4 @@
-use crate::config::{get_config, Config, ConfigItem, Directory};
 use std::{
-    collections::BTreeMap,
     fs::{create_dir, File},
     io::Write,
 };
@@ -34,7 +32,19 @@ pub fn get_config_json(app_handle: AppHandle) -> String {
 }
 
 #[tauri::command]
-pub fn write_config<R: Runtime>(app: tauri::AppHandle<R>, json: String) -> Result<(), String> {
-    println!("{}", json);
+pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> Result<(), String> {
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
+    path.push("config.json");
+
+    match File::create(path.clone()) {
+        Ok(mut file) => {
+            write!(file, "{}", json).unwrap();
+        }
+        Err(_) => {
+            create_dir(path.parent().unwrap()).unwrap();
+            let mut file = File::create(path.clone()).unwrap();
+            write!(file, "{}", json).unwrap();
+        }
+    }
     Ok(())
 }
