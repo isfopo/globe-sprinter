@@ -1,3 +1,4 @@
+use jsonxf::pretty_print;
 use std::{
     fs::{create_dir, File},
     io::Write,
@@ -38,12 +39,12 @@ pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> Resul
 
     match File::create(path.clone()) {
         Ok(mut file) => {
-            write!(file, "{}", json).unwrap();
+            write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
         }
         Err(_) => {
             create_dir(path.parent().unwrap()).unwrap();
             let mut file = File::create(path.clone()).unwrap();
-            write!(file, "{}", json).unwrap();
+            write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
         }
     }
     Ok(())
