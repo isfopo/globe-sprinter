@@ -18,8 +18,9 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
-    color: black,
-    backgroundColor: offWhite,
+    color: white,
+    backgroundColor: lightBlack,
+    border: "none",
     boxShadow: "0 0 100px rgba(0, 0, 0, 1)",
   },
 };
