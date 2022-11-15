@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Config } from "../../../hooks/useConfig";
 import { CommandCell } from "../../cells/CommandCell";
 import { DirectoryCell } from "../../cells/DirectoryCell";
+import { Directory } from "../../Directory";
 import styles from "./index.module.scss";
 
 export interface ConfigListProps {
@@ -17,14 +18,8 @@ export const ConfigList: React.FC<ConfigListProps> = ({
   isChild,
   hide,
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-
   return (
-    <div
-      className={`${styles["container"]} ${
-        isExpanded ? styles["expanded"] : ""
-      } ${isChild ? styles["child"] : ""}`}
-    >
+    <div className={`${styles["container"]} ${isChild ? styles["child"] : ""}`}>
       {Object.keys(config).map((title, key) => {
         if (typeof config[title] === "string") {
           return (
@@ -37,20 +32,7 @@ export const ConfigList: React.FC<ConfigListProps> = ({
           );
         } else {
           return (
-            <>
-              <DirectoryCell
-                title={title}
-                location={`${location}/${title}`}
-                isExpanded={isExpanded}
-                expand={() => setIsExpanded((e) => !e)}
-              />
-              <ConfigList
-                config={config[title] as Config}
-                isChild={true}
-                location={`${location}/${title}`}
-                hide={!isExpanded}
-              />
-            </>
+            <Directory config={config} title={title} key={key} hide={hide} />
           );
         }
       })}

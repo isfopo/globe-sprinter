@@ -58,3 +58,10 @@
     transform: rotate(-90deg);
   }
 }
+
+.hide {
+  opacity: 0;
+  transform: scaleY(0);
+  max-height: 0;
+  margin-bottom: 0 !important;
+}
