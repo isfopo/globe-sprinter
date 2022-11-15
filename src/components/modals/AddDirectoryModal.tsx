@@ -42,7 +42,7 @@ export const AddDirectoryModal = () => {
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
       <form onSubmit={handleSubmit}>
         <label>
-          Enter your name:
+          Enter the key for the new directory:
           <input
             type="text"
             value={key}
