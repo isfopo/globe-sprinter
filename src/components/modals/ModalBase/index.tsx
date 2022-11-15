@@ -1,8 +1,8 @@
 import React from "react";
 import Modal from "react-modal";
 import {
-  black,
-  offwhite as offWhite,
+  lightblack as lightBlack,
+  white as white,
 } from "../../../styles/_colors.module.scss";
 
 Modal.setAppElement("#root");
