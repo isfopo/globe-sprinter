@@ -5,7 +5,7 @@ import { modalsState } from "../state/modalsState";
 export const useModalListener = <T>(
   id: string,
   onOpen: () => void,
-  onRemove: () => void
+  onClose: () => void
 ) => {
   const [modals, setModals] = useRecoilState(modalsState);
   const [args, setArgs] = useState<{ [key: string]: any }>();
@@ -15,13 +15,13 @@ export const useModalListener = <T>(
       onOpen();
       setArgs(modals.filter((m) => m.id === id)[0].args);
     } else {
-      onRemove();
+      onClose();
     }
   }, [modals, onOpen, id]);
 
-  const remove = useCallback(() => {
+  const close = useCallback(() => {
     setModals((m) => m.filter((n) => n.id !== id));
   }, [setModals]);
 
-  return { remove, args: (args ?? {}) as T };
+  return { close, args: (args ?? {}) as T };
 };

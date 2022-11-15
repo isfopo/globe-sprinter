@@ -12,7 +12,7 @@ export const AddDirectoryModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [key, setKey] = useState("");
   const {
-    remove,
+    close,
     args: { location },
   } = useModalListener<AddDirectoryArgs>(
     "AddDirectoryModal",
@@ -20,7 +20,7 @@ export const AddDirectoryModal = () => {
     () => setIsOpen(false)
   );
 
-  const { config, loading, insert } = useConfig();
+  const { loading, insert } = useConfig();
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
     async (event) => {
@@ -28,14 +28,15 @@ export const AddDirectoryModal = () => {
       if (loading) return;
 
       insert(location, key);
+      close();
     },
-    [key, loading, location]
+    [key, loading, location, close]
   );
 
   const handleRequestClose = useCallback(() => {
     setKey("");
-    remove();
-  }, [setKey, remove]);
+    close();
+  }, [setKey, close]);
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
