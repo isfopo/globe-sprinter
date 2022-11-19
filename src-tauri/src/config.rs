@@ -42,7 +42,10 @@ pub fn parse_config(path: PathBuf) -> Config {
         },
     };
 
-    serde_json::from_str::<Config>(&json).unwrap()
+    match serde_json::from_str::<Config>(&json) {
+        Ok(out) => out,
+        Err(..) => Config::new(),
+    }
 }
 
 pub fn get_config(app: &AppHandle) -> Config {
