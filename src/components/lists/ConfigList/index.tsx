@@ -32,7 +32,13 @@ export const ConfigList: React.FC<ConfigListProps> = ({
           );
         } else {
           return (
-            <Directory config={config} title={title} key={key} hide={hide} />
+            <Directory
+              config={config}
+              title={title}
+              key={key}
+              hide={hide}
+              location={location}
+            />
           );
         }
       })}

@@ -6,12 +6,14 @@ import { ConfigList } from "./lists/ConfigList";
 export interface DirectoryProps {
   title: string;
   config: Config;
+  location: string;
   hide?: boolean;
 }
 
 export const Directory: React.FC<DirectoryProps> = ({
   title,
   config,
+  location,
   hide,
 }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
