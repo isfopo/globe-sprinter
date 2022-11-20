@@ -16,7 +16,7 @@
 
   p {
     color: $white;
-    padding: 0.6em 1.2em;
+    @include foreground-spacing;
     cursor: default;
   }
 

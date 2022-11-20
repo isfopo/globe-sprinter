@@ -1,8 +1,16 @@
+@use "../../styles/mixins.module.scss" as *;
+
 .container {
   display: flex;
   flex-direction: column;
 
   label {
     margin: 1rem;
+  }
+
+  button {
+    @include foreground-element;
+    @include foreground-spacing;
+    cursor: pointer;
   }
 }

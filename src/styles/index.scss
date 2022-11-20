@@ -26,6 +26,6 @@ h1 {
 }
 
 input {
-  padding: 0.6em 1.2em;
   @include foreground-element;
+  @include foreground-spacing;
 }
