@@ -1,15 +1,9 @@
 @use "../../../styles/colors.module.scss" as *;
+@use "../../../styles/mixins.module.scss" as *;
 @use "../../../styles/variables" as *;
 
 .container {
-  border-radius: 8px;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: $black;
-  background-color: $white;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-  outline: none;
+  @include foreground-element;
 
   width: 100%;
   max-height: 6rem;
@@ -19,11 +13,6 @@
   justify-content: space-between;
   margin-bottom: 1rem;
   opacity: 1;
-
-  @media (prefers-color-scheme: dark) {
-    color: $white;
-    background-color: #0f0f0f98;
-  }
 
   p {
     color: $white;
