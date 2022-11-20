@@ -1,0 +1,67 @@
+@use "../../../styles/colors.module.scss" as *;
+
+.container {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  color: $black;
+  background-color: $white;
+  transition: border-color 0.25s;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  outline: none;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: $white;
+    background-color: #0f0f0f98;
+  }
+
+  p {
+    color: $white;
+    padding: 0.6em 1.2em;
+    cursor: default;
+    user-select: none;
+  }
+
+  svg {
+    cursor: pointer;
+    height: auto;
+    color: $white;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    gap: 1rem;
+
+    > svg {
+      transition: transform 0.5s;
+      width: 3rem;
+    }
+  }
+}
+
+.expanded {
+  span > svg:last-child {
+    transform: rotate(-90deg);
+  }
+}
+
+.hide {
+  opacity: 0;
+  transform: scaleY(0);
+  max-height: 0;
+  margin-bottom: 0 !important;
+}

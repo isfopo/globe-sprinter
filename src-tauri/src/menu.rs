@@ -1,12 +1,18 @@
-use serde_json::{Map, Value};
+use crate::config::{Config, ConfigItem};
+use std::collections::BTreeMap;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTraySubmenu};
 use tauri_runtime::menu::SystemTrayMenuEntry;
 
-pub fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
-    let mut menu = SystemTrayMenu::new();
+pub fn generate_menu(config: Config) -> SystemTrayMenu {
+    let mut menu: SystemTrayMenu = SystemTrayMenu::new();
 
-    for (key, value) in config.into_iter().rev() {
-        menu.items.push(generate_menu_entry(key, value))
+    for (key, value) in config.into_iter() {
+        menu.items.push(match value {
+            ConfigItem::String(command) => {
+                SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(command, key))
+            }
+            ConfigItem::Directory(dir) => generate_menu_entry(key, dir),
+        });
     }
 
     menu.add_native_item(SystemTrayMenuItem::Separator)
@@ -16,17 +22,20 @@ pub fn generate_menu(config: &Map<String, Value>) -> SystemTrayMenu {
         .add_item(CustomMenuItem::new("quit", "Quit"))
 }
 
-pub fn generate_menu_entry(key: &String, value: &Value) -> SystemTrayMenuEntry {
-    match value.as_str() {
-        Some(value) => SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(value, key)),
-        None => {
-            let mut submenu = SystemTrayMenu::new();
+pub fn generate_menu_entry(
+    key: String,
+    directory: BTreeMap<String, ConfigItem>,
+) -> SystemTrayMenuEntry {
+    let mut submenu = SystemTrayMenu::new();
 
-            for (sub_key, sub_value) in value.as_object().unwrap().into_iter().rev() {
-                submenu.items.push(generate_menu_entry(sub_key, sub_value))
+    for (key, value) in directory.into_iter() {
+        submenu.items.push(match value {
+            ConfigItem::String(command) => {
+                SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(command, key))
             }
-
-            SystemTrayMenuEntry::Submenu(SystemTraySubmenu::new(key, submenu))
-        }
+            ConfigItem::Directory(sub_dir) => generate_menu_entry(key, sub_dir),
+        })
     }
+
+    SystemTrayMenuEntry::Submenu(SystemTraySubmenu::new(key, submenu))
 }

@@ -1,0 +1,15 @@
+@use "../../../styles/colors.module.scss" as *;
+
+.container {
+  button {
+    background-color: transparent;
+    border: none;
+
+    svg {
+      width: 1.5rem;
+      cursor: pointer;
+      height: auto;
+      color: $white;
+    }
+  }
+}
