@@ -29,7 +29,7 @@ export const AddCommandModal = () => {
       if (loading) return;
 
       insert(location, key, command);
-      close();
+      handleRequestClose();
     },
     [key, loading, location, command, close]
   );

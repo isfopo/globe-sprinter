@@ -28,7 +28,7 @@ export const AddDirectoryModal = () => {
       if (loading) return;
 
       insert(location, key);
-      close();
+      handleRequestClose();
     },
     [key, loading, location, close]
   );
