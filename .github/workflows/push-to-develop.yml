@@ -1,8 +1,8 @@
-name: Push to Main
+name: Push to Develop
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   publish-tauri:
