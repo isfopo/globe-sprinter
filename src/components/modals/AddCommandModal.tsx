@@ -58,7 +58,12 @@ export const AddCommandModal = () => {
           value={command}
           onChange={(e) => setCommand(e.target.value)}
         />
-        <button type="submit" value="Submit" onClick={handleSubmit}>
+        <button
+          type="submit"
+          value="Submit"
+          onClick={handleSubmit}
+          disabled={key.length === 0 || command.length === 0}
+        >
           Submit
         </button>
       </form>

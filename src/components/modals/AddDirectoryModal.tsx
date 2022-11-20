@@ -22,7 +22,7 @@ export const AddDirectoryModal = () => {
 
   const { loading, insert } = useConfig();
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     async (event) => {
       event.preventDefault();
       if (loading) return;
@@ -40,7 +40,7 @@ export const AddDirectoryModal = () => {
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
-      <form onSubmit={handleSubmit} className={styles["container"]}>
+      <form className={styles["container"]}>
         <label htmlFor="name">Enter the key for the new directory:</label>
         <input
           type="text"
@@ -48,7 +48,14 @@ export const AddDirectoryModal = () => {
           value={key}
           onChange={(e) => setKey(e.target.value)}
         />
-        <input type="submit" value="Submit" />
+        <button
+          type="submit"
+          value="Submit"
+          onClick={handleSubmit}
+          disabled={key.length === 0}
+        >
+          Submit
+        </button>
       </form>
     </ModalBase>
   );
