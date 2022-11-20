@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useConfig } from "../../hooks/useConfig";
 import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
+import styles from "./index.module.scss";
 
 export interface AddCommandArgs {
   location: string;
@@ -23,7 +24,7 @@ export const AddCommandModal = () => {
 
   const { loading, insert } = useConfig();
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     async (event) => {
       event.preventDefault();
       if (loading) return;
@@ -42,24 +43,24 @@ export const AddCommandModal = () => {
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter the key for the new command:
-          <input
-            type="text"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-          />
-        </label>
-        <label>
-          Enter the new command:
-          <input
-            type="text"
-            value={command}
-            onChange={(e) => setCommand(e.target.value)}
-          />
-          <input type="submit" />
-        </label>
+      <form className={styles["container"]}>
+        <label htmlFor="key">Enter the key for the new command:</label>
+        <input
+          type="text"
+          id="key"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <label htmlFor="command">Enter the new command:</label>
+        <input
+          type="text"
+          id="command"
+          value={command}
+          onChange={(e) => setCommand(e.target.value)}
+        />
+        <button type="submit" value="Submit" onClick={handleSubmit}>
+          Submit
+        </button>
       </form>
     </ModalBase>
   );

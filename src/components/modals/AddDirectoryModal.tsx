@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
-import { readConfig } from "../../helpers/file";
-import { Config, useConfig } from "../../hooks/useConfig";
+import { useCallback, useState } from "react";
+import { useConfig } from "../../hooks/useConfig";
 import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
+import styles from "./index.module.scss";
 
 export interface AddDirectoryArgs {
   location: string;
@@ -40,16 +40,15 @@ export const AddDirectoryModal = () => {
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter the key for the new directory:
-          <input
-            type="text"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-          />
-          <input type="submit" />
-        </label>
+      <form onSubmit={handleSubmit} className={styles["container"]}>
+        <label htmlFor="name">Enter the key for the new directory:</label>
+        <input
+          type="text"
+          id="name"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <input type="submit" value="Submit" />
       </form>
     </ModalBase>
   );
