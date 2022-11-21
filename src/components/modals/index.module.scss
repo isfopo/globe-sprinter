@@ -1,4 +1,5 @@
 @use "../../styles/mixins.module.scss" as *;
+@use "../../styles/colors.module.scss" as *;
 
 .container {
   display: flex;
@@ -12,5 +13,12 @@
     @include foreground-element;
     @include foreground-spacing;
     cursor: pointer;
+
+    &:disabled {
+      box-shadow: none;
+      cursor: not-allowed;
+      color: rgba($white, 0.5);
+      background-color: rgba($black, 0.5);
+    }
   }
 }
