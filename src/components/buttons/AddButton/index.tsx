@@ -5,11 +5,11 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import { useModalDispatch } from "../../../hooks/useModalDispatch";
 
-export interface AddMenuProps {
+export interface AddButtonProps {
   location: string;
 }
 
-export const AddMenu: React.FC<AddMenuProps> = ({ location }) => {
+export const AddButton: React.FC<AddButtonProps> = ({ location }) => {
   const openModal = useModalDispatch();
 
   return (

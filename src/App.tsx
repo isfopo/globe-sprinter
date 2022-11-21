@@ -1,7 +1,6 @@
 import styles from "./App.module.scss";
 import { ConfigList } from "./components/lists/ConfigList";
-import { AddMenu } from "./components/menus/AddMenu";
-import { AddDirectoryModal } from "./components/modals/AddDirectoryModal";
+import { AddButton } from "./components/buttons/AddButton";
 import { Modals } from "./components/modals/Modals";
 import { useConfig } from "./hooks/useConfig";
 
@@ -16,7 +15,7 @@ export default () => {
     <div className={styles["container"]}>
       <Modals />
       <div className={styles["menu"]}>
-        <AddMenu location="/" />
+        <AddButton location="/" />
       </div>
       <div className={styles["row"]}>
         <ConfigList config={config} />
