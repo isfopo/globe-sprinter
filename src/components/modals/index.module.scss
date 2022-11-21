@@ -1,0 +1,26 @@
+@use "../../styles/mixins.module.scss" as *;
+@use "../../styles/colors.module.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  button {
+    @include foreground-element;
+    @include foreground-spacing;
+    cursor: pointer;
+
+    &:disabled {
+      box-shadow: none;
+      cursor: not-allowed;
+      color: rgba($white, 0.5);
+      background-color: rgba($black, 0.5);
+    }
+
+    &:not([disabled]):hover,
+    &:not([disabled]):focus {
+      box-shadow: 0 0 10px rgba($white, 0.2);
+    }
+  }
+}

@@ -1,8 +1,8 @@
-import { useCallback, useMemo, useState } from "react";
-import { readConfig } from "../../helpers/file";
-import { Config, useConfig } from "../../hooks/useConfig";
+import { useCallback, useState } from "react";
+import { useConfig } from "../../hooks/useConfig";
 import { useModalListener } from "../../hooks/useModalListener";
 import { ModalBase } from "./ModalBase";
+import styles from "./index.module.scss";
 
 export interface AddDirectoryArgs {
   location: string;
@@ -22,13 +22,13 @@ export const AddDirectoryModal = () => {
 
   const { loading, insert } = useConfig();
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback(
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = useCallback(
     async (event) => {
       event.preventDefault();
       if (loading) return;
 
       insert(location, key);
-      close();
+      handleRequestClose();
     },
     [key, loading, location, close]
   );
@@ -40,16 +40,22 @@ export const AddDirectoryModal = () => {
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Enter the key for the new directory:
-          <input
-            type="text"
-            value={key}
-            onChange={(e) => setKey(e.target.value)}
-          />
-          <input type="submit" />
-        </label>
+      <form className={styles["container"]}>
+        <label htmlFor="name">Enter the key for the new directory:</label>
+        <input
+          type="text"
+          id="name"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+        />
+        <button
+          type="submit"
+          value="Submit"
+          onClick={handleSubmit}
+          disabled={key.length === 0}
+        >
+          Submit
+        </button>
       </form>
     </ModalBase>
   );
