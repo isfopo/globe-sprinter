@@ -22,6 +22,7 @@ const customStyles = {
     backgroundColor: lightBlack,
     border: "none",
     boxShadow: "0 0 100px rgba(0, 0, 0, 1)",
+    width: "50%",
   },
 };
 
