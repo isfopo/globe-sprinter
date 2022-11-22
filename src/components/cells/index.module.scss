@@ -1,6 +1,6 @@
-@use "../../../styles/colors.module.scss" as *;
-@use "../../../styles/mixins.module.scss" as *;
-@use "../../../styles/variables" as *;
+@use "../../styles/colors.module.scss" as *;
+@use "../../styles/mixins.module.scss" as *;
+@use "../../styles/variables" as *;
 
 .container {
   @include foreground-element;

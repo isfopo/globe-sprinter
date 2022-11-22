@@ -1,7 +1,7 @@
 import { ReactComponent as Arrow } from "../../../assets/icons/arrow.svg";
 import { AddButton } from "../../buttons/AddButton";
 import { RemoveButton } from "../../buttons/RemoveButton";
-import styles from "./index.module.scss";
+import styles from "../index.module.scss";
 
 export interface DirectoryCellProps {
   title: string;
