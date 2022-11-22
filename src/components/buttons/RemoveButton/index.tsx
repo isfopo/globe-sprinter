@@ -7,7 +7,12 @@ export const RemoveButton: React.FC<ButtonProps> = ({ location }) => {
   const openModal = useModalDispatch();
 
   return (
-    <button title="remove" type="button" className={styles["button"]}>
+    <button
+      title="remove"
+      type="button"
+      className={styles["button"]}
+      onClick={() => openModal("removeModal", { location })}
+    >
       <Remove />
     </button>
   );
