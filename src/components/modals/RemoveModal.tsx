@@ -20,9 +20,13 @@ export const RemoveModal = () => {
     () => setIsOpen(false)
   );
 
+  const { loading, remove } = useConfig();
+
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> =
     useCallback(async () => {
-      console.log(location, title);
+      if (loading) return;
+      remove(location, title);
+      close();
     }, [location, close, title]);
 
   return (
