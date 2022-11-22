@@ -6,25 +6,24 @@ import styles from "./index.module.scss";
 
 export interface RemoveArgs {
   location: string;
+  title: string;
 }
 
 export const RemoveModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const {
     close,
-    args: { location },
+    args: { location, title },
   } = useModalListener<RemoveArgs>(
     "removeModal",
     () => setIsOpen(true),
     () => setIsOpen(false)
   );
 
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = useCallback(
-    async (event) => {
-      event.preventDefault();
-    },
-    [location, close]
-  );
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> =
+    useCallback(async () => {
+      console.log(location, title);
+    }, [location, close, title]);
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={close}>

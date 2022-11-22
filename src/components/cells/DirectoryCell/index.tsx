@@ -27,7 +27,7 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
     <span>
       <span>
         <AddButton location={location} />
-        <RemoveButton location={location} />
+        <RemoveButton location={location} title={title} />
       </span>
       <Arrow onClick={expand} />
     </span>
