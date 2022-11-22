@@ -27,6 +27,7 @@ export const ConfigList: React.FC<ConfigListProps> = ({
               title={title}
               command={config[title] as string}
               key={key}
+              location={location}
               hide={hide}
             />
           );
