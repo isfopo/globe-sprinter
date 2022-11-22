@@ -10,7 +10,6 @@ export interface RemoveArgs {
 
 export const RemoveModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [key, setKey] = useState("");
   const {
     close,
     args: { location },
@@ -24,19 +23,20 @@ export const RemoveModal = () => {
     async (event) => {
       event.preventDefault();
     },
-    [key, location, close]
+    [location, close]
   );
 
-  const handleRequestClose = useCallback(() => {
-    setKey("");
-    close();
-  }, [setKey, close]);
-
   return (
-    <ModalBase isOpen={isOpen} onRequestClose={handleRequestClose}>
-      <p>Are you sure?</p>
-      <button title="No" type="button" />
-      <button title="Yes" type="button" />
+    <ModalBase isOpen={isOpen} onRequestClose={close}>
+      <form className={styles["container"]}>
+        <label>Are you sure?</label>
+        <button type="button" title="Confirm" onClick={handleSubmit}>
+          Confirm
+        </button>
+        <button type="button" title="Cancel" onClick={close}>
+          Cancel
+        </button>
+      </form>
     </ModalBase>
   );
 };
