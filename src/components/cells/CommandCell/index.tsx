@@ -18,7 +18,7 @@ export const CommandCell: React.FC<CommandCellProps> = ({
     <p>{title}</p>
     <span>
       <span>
-        <RemoveButton location={location} title={title} />
+        <RemoveButton location={location} title={title} isCommand />
       </span>
       <p>{command}</p>
     </span>

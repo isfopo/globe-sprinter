@@ -10,7 +10,7 @@ export const useConfig = (): {
   config: Config;
   loading: boolean;
   insert: (location: string, key: string, command?: string) => void;
-  remove: (location: string, key: string) => void;
+  remove: (location: string) => void;
 } => {
   const [config, setConfig] = useRecoilState(configState);
 
@@ -32,17 +32,19 @@ export const useConfig = (): {
   );
 
   const remove = useCallback(
-    (location: string, key: string) => {
+    (location: string) => {
       const branch = location?.split("/").filter((step) => step) ?? [];
+      const key = branch.pop();
 
       setConfig((config) => {
         if (!config) return;
         let place = config;
         for (const step of branch) {
           place = place[step] as Config;
-          console.log(location);
         }
-        delete place[key];
+        if (key) {
+          delete place[key];
+        }
         return config;
       });
     },
