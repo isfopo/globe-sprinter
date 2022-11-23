@@ -5,7 +5,7 @@ import styles from "./index.module.scss";
 
 export interface RemoveButtonProps extends ButtonProps {
   title: string;
-  isCommand: boolean;
+  isCommand?: boolean;
 }
 
 export const RemoveButton: React.FC<RemoveButtonProps> = ({
