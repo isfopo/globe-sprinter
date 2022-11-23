@@ -1,6 +1,7 @@
 import { ReactComponent as Arrow } from "../../../assets/icons/arrow.svg";
-import { AddMenu } from "../../menus/AddMenu";
-import styles from "./index.module.scss";
+import { AddButton } from "../../buttons/AddButton";
+import { RemoveButton } from "../../buttons/RemoveButton";
+import styles from "../index.module.scss";
 
 export interface DirectoryCellProps {
   title: string;
@@ -24,7 +25,10 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
   >
     <p>{title}</p>
     <span>
-      <AddMenu location={location} />
+      <span>
+        <AddButton location={location} />
+        <RemoveButton location={location} title={title} />
+      </span>
       <Arrow onClick={expand} />
     </span>
   </div>
