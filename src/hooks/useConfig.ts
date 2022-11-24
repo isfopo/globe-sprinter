@@ -1,3 +1,4 @@
+import { invoke } from "@tauri-apps/api";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { configState } from "../state/configState";
@@ -14,25 +15,34 @@ export const useConfig = (): {
 } => {
   const [config, setConfig] = useRecoilState(configState);
 
-  const insert = useCallback(
-    (location: string, key: string, command?: string) => {
-      const branch = location?.split("/").filter((step) => step) ?? [];
+  useEffect(() => {
+    const sync = async () => {
+      if (!config) {
+        setConfig(JSON.parse(await invoke<string>("get_config_json")));
+      }
+    };
+    sync();
+  }, []);
 
-      setConfig((config) => {
-        if (!config) return;
-        let place = config;
-        for (const step of branch) {
-          place = place[step] as Config;
-        }
-        place[key] = command ?? ({} as Config);
-        return config;
-      });
+  const insert = useCallback(
+    async (location: string, key: string, command?: string) => {
+      const branch = location?.split("/").filter((step) => step) ?? [];
+      if (!config) return;
+      let place = config;
+      for (const step of branch) {
+        place = place[step] as Config;
+      }
+      place[key] = command ?? ({} as Config);
+
+      invoke("write_config", { json: JSON.stringify(config) });
+
+      setConfig(JSON.parse(await invoke<string>("get_config_json")));
     },
     [setConfig]
   );
 
   const remove = useCallback(
-    (location: string) => {
+    async (location: string) => {
       const branch = location?.split("/").filter((step) => step) ?? [];
       const key = branch.pop();
 
