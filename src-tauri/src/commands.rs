@@ -3,7 +3,7 @@ use std::{
     fs::{create_dir, File},
     io::Write,
 };
-use tauri::{api::file, AppHandle, Runtime};
+use tauri::{api::file, AppHandle};
 
 use crate::config::get_config;
 use crate::menu::generate_menu;
