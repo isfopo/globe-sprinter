@@ -46,6 +46,7 @@ fn main() {
                         "main",
                         tauri::WindowUrl::App("index.html".into()),
                     )
+                    .title("Globe Sprinter")
                     .build();
                 }
             }
