@@ -47,7 +47,8 @@ fn main() {
                         tauri::WindowUrl::App("index.html".into()),
                     )
                     .title("Globe Sprinter")
-                    .build();
+                    .build()
+                    .unwrap();
                 }
             }
             "hide" => {
