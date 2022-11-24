@@ -29,7 +29,7 @@ pub fn generate_menu_entry(
 ) -> SystemTrayMenuEntry {
     let mut submenu = SystemTrayMenu::new();
 
-    for (key, value) in directory.into_iter() {
+    for (key, value) in directory.into_iter().rev() {
         submenu.items.push(match value {
             ConfigItem::String(command) => {
                 SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(command, key))
