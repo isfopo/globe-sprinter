@@ -37,6 +37,12 @@ fn main() {
                     .output()
                     .expect("failed to execute process");
             }
+            "reload" => {
+                app.tray_handle()
+                    .set_menu(generate_menu(get_config(&app)))
+                    .unwrap();
+                app.emit_all("reload", {});
+            }
             "open" => {
                 if let Some(window) = app.get_window("main") {
                     window.show().unwrap();

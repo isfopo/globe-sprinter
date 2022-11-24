@@ -17,6 +17,7 @@ pub fn generate_menu(config: Config) -> SystemTrayMenu {
 
     menu.add_native_item(SystemTrayMenuItem::Separator)
         .add_item(CustomMenuItem::new("config", "Configure"))
+        .add_item(CustomMenuItem::new("reload", "Reload"))
         .add_item(CustomMenuItem::new("open", "Open"))
         .add_item(CustomMenuItem::new("hide", "Hide"))
         .add_item(CustomMenuItem::new("quit", "Quit"))
@@ -28,7 +29,7 @@ pub fn generate_menu_entry(
 ) -> SystemTrayMenuEntry {
     let mut submenu = SystemTrayMenu::new();
 
-    for (key, value) in directory.into_iter() {
+    for (key, value) in directory.into_iter().rev() {
         submenu.items.push(match value {
             ConfigItem::String(command) => {
                 SystemTrayMenuEntry::CustomItem(CustomMenuItem::new(command, key))

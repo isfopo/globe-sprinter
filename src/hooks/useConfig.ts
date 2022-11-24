@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api";
+import { listen } from "@tauri-apps/api/event";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { configState } from "../state/configState";
@@ -19,6 +20,9 @@ export const useConfig = (): {
     const get = async () => {
       if (!config) {
         setConfig(JSON.parse(await invoke<string>("get_config_json")));
+        await listen("reload", async () => {
+          setConfig(JSON.parse(await invoke<string>("get_config_json")));
+        });
       }
     };
     get();
