@@ -16,13 +16,21 @@ export const useConfig = (): {
   const [config, setConfig] = useRecoilState(configState);
 
   useEffect(() => {
-    const sync = async () => {
+    const get = async () => {
       if (!config) {
         setConfig(JSON.parse(await invoke<string>("get_config_json")));
       }
     };
-    sync();
+    get();
   }, []);
+
+  const sync = useCallback(
+    async (config: Config) => {
+      await invoke("write_config", { json: JSON.stringify(config) });
+      setConfig(JSON.parse(await invoke<string>("get_config_json")));
+    },
+    [setConfig]
+  );
 
   const insert = useCallback(
     async (location: string, key: string, command?: string) => {
@@ -34,9 +42,7 @@ export const useConfig = (): {
       }
       place[key] = command ?? ({} as Config);
 
-      invoke("write_config", { json: JSON.stringify(config) });
-
-      setConfig(JSON.parse(await invoke<string>("get_config_json")));
+      sync(config);
     },
     [setConfig, config]
   );
@@ -54,8 +60,7 @@ export const useConfig = (): {
       if (key) {
         delete place[key];
       }
-      invoke("write_config", { json: JSON.stringify(config) });
-      setConfig(JSON.parse(await invoke<string>("get_config_json")));
+      sync(config);
     },
     [setConfig, config]
   );
