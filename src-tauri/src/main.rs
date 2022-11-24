@@ -41,7 +41,12 @@ fn main() {
                 if let Some(window) = app.get_window("main") {
                     window.show().unwrap();
                 } else {
-                    println!("no window");
+                    tauri::WindowBuilder::new(
+                        app,
+                        "main",
+                        tauri::WindowUrl::App("index.html".into()),
+                    )
+                    .build();
                 }
             }
             "hide" => {
