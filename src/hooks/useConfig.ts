@@ -26,8 +26,8 @@ export const useConfig = (): {
 
   const insert = useCallback(
     async (location: string, key: string, command?: string) => {
-      const branch = location?.split("/").filter((step) => step) ?? [];
       if (!config) return;
+      const branch = location?.split("/").filter((step) => step) ?? [];
       let place = config;
       for (const step of branch) {
         place = place[step] as Config;
@@ -38,27 +38,26 @@ export const useConfig = (): {
 
       setConfig(JSON.parse(await invoke<string>("get_config_json")));
     },
-    [setConfig]
+    [setConfig, config]
   );
 
   const remove = useCallback(
     async (location: string) => {
+      if (!config) return;
       const branch = location?.split("/").filter((step) => step) ?? [];
       const key = branch.pop();
 
-      setConfig((config) => {
-        if (!config) return;
-        let place = config;
-        for (const step of branch) {
-          place = place[step] as Config;
-        }
-        if (key) {
-          delete place[key];
-        }
-        return config;
-      });
+      let place = config;
+      for (const step of branch) {
+        place = place[step] as Config;
+      }
+      if (key) {
+        delete place[key];
+      }
+      invoke("write_config", { json: JSON.stringify(config) });
+      setConfig(JSON.parse(await invoke<string>("get_config_json")));
     },
-    [setConfig]
+    [setConfig, config]
   );
 
   return { config: config ?? {}, loading: !config, insert, remove };
