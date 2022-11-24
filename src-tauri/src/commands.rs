@@ -5,6 +5,9 @@ use std::{
 };
 use tauri::{api::file, AppHandle, Runtime};
 
+use crate::config::get_config;
+use crate::menu::generate_menu;
+
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 #[tauri::command]
@@ -33,7 +36,7 @@ pub fn get_config_json(app_handle: AppHandle) -> String {
 }
 
 #[tauri::command]
-pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> String {
+pub fn write_config(app_handle: AppHandle, json: String) -> String {
     let mut path = app_handle.path_resolver().app_data_dir().unwrap();
     path.push("config.json");
 
@@ -47,6 +50,11 @@ pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> Strin
             write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
         }
     }
+
+    app_handle
+        .tray_handle()
+        .set_menu(generate_menu(get_config(&app_handle)))
+        .unwrap();
 
     match file::read_string(path.clone()) {
         Ok(config) => config,
