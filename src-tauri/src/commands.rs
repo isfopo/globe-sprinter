@@ -33,7 +33,7 @@ pub fn get_config_json(app_handle: AppHandle) -> String {
 }
 
 #[tauri::command]
-pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> Result<(), String> {
+pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> String {
     let mut path = app_handle.path_resolver().app_data_dir().unwrap();
     path.push("config.json");
 
@@ -47,5 +47,23 @@ pub fn write_config<R: Runtime>(app_handle: AppHandle<R>, json: String) -> Resul
             write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
         }
     }
-    Ok(())
+
+    match file::read_string(path.clone()) {
+        Ok(config) => config,
+        Err(_err) => {
+            println!("{}", _err.to_string());
+            match File::create(path.clone()) {
+                Ok(mut file) => {
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+                Err(_) => {
+                    create_dir(path.parent().unwrap()).unwrap();
+                    let mut file = File::create(path.clone()).unwrap();
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+            }
+        }
+    }
 }

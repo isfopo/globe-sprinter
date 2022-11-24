@@ -26,8 +26,11 @@ export const useConfig = (): {
 
   const sync = useCallback(
     async (config: Config) => {
-      await invoke("write_config", { json: JSON.stringify(config) });
-      setConfig(JSON.parse(await invoke<string>("get_config_json")));
+      setConfig(
+        JSON.parse(
+          await invoke("write_config", { json: JSON.stringify(config) })
+        )
+      );
     },
     [setConfig]
   );
