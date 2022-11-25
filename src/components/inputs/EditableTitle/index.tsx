@@ -14,10 +14,24 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
 }) => {
   const { update } = useConfig();
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [value, setValue] = useState<string>(title);
+
+  if (isEditing) {
+    return (
+      <span className={styles["input"]}>
+        <input
+          type="text"
+          aria-label="title"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      </span>
+    );
+  }
 
   return (
     <span className={styles["title"]}>
-      {isEditing ? <p>edit</p> : <p>{title}</p>}
+      <p>{title}</p>
       <EditButton location={location} onClick={() => setIsEditing(true)} />
     </span>
   );
