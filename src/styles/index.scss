@@ -17,6 +17,8 @@
   -moz-osx-font-smoothing: grayscale;
 
   --toastify-font-family: $base-font-family;
+  --toastify-color-dark: #232323;
+  --toastify-color-error: #ea5e4f;
 
   @media (prefers-color-scheme: dark) {
     color: $white;
