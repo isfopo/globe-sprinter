@@ -1,0 +1,14 @@
+@use "../../../styles/mixins.module.scss" as *;
+@use "../../../styles/colors.module.scss" as *;
+
+.button {
+  background-color: transparent;
+  border: none;
+  padding: 2px 6px 3px 6px;
+
+  svg {
+    @include icon;
+    width: 0.8rem;
+    color: $gray;
+  }
+}

@@ -1,5 +1,6 @@
 import { ReactComponent as Arrow } from "../../../assets/icons/arrow.svg";
 import { AddButton } from "../../buttons/AddButton";
+import { EditButton } from "../../buttons/EditButton";
 import { RemoveButton } from "../../buttons/RemoveButton";
 import styles from "../index.module.scss";
 
@@ -23,7 +24,10 @@ export const DirectoryCell: React.FC<DirectoryCellProps> = ({
       isExpanded ? styles["expanded"] : ""
     } ${hide ? styles["hide"] : ""}`}
   >
-    <p>{title}</p>
+    <span>
+      <p>{title}</p>
+      <EditButton location={location} title={title} />
+    </span>
     <span>
       <span>
         <AddButton location={location} />
