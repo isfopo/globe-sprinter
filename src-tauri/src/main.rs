@@ -43,7 +43,10 @@ fn main() {
                 app.tray_handle()
                     .set_menu(generate_menu(get_config(&app)))
                     .unwrap();
-                app.emit_all("reload", {}).unwrap();
+                match app.emit_all("reload", {}) {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Could not reload"),
+                }
             }
             "open" => {
                 if let Some(window) = app.get_window("main") {
@@ -61,20 +64,24 @@ fn main() {
             }
             "hide" => {
                 let window = app.get_window("main").unwrap();
-                window.hide().unwrap();
+                match window.hide() {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Could not hide window"),
+                };
             }
             "quit" => {
                 std::process::exit(0);
             }
             id => {
-                app.clipboard_manager()
-                    .write_text(id)
-                    .expect("failed to copy");
+                match app.clipboard_manager().write_text(id) {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Failed to copy command"),
+                }
 
-                Command::new("open")
-                    .arg("/bin/zsh")
-                    .output()
-                    .expect("failed to execute process");
+                match Command::new("open").arg("/bin/zsh").output() {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Failed to execute process"),
+                }
             }
         },
         _ => {}
