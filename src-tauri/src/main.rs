@@ -5,10 +5,12 @@
 
 mod commands;
 mod config;
+mod errors;
 mod menu;
 
 use commands::{get_config_json, write_config};
 use config::{get_config, get_config_path};
+use errors::emit_error;
 use menu::generate_menu;
 
 use std::process::Command;
@@ -31,12 +33,12 @@ fn main() {
 
     let system_tray_event = |app: &AppHandle, event: SystemTrayEvent| match event {
         SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-            "config" => {
-                Command::new("open")
-                    .arg(get_config_path(app))
-                    .output()
-                    .expect("failed to execute process");
-            }
+            "config" => match Command::new("open").arg(get_config_path(app)).output() {
+                Ok(..) => (),
+                Err(..) => {
+                    emit_error(app, "failed to execute process");
+                }
+            },
             "reload" => {
                 app.tray_handle()
                     .set_menu(generate_menu(get_config(&app)))
