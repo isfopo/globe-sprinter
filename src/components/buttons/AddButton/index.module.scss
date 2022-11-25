@@ -1,0 +1,13 @@
+@use "../../../styles/colors.module.scss" as *;
+@use "../../../styles/mixins.module.scss" as *;
+
+.container {
+  button {
+    background-color: transparent;
+    border: none;
+
+    svg {
+      @include icon;
+    }
+  }
+}

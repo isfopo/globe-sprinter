@@ -1,0 +1,31 @@
+@use "./colors.module.scss" as *;
+@use "./mixins.module.scss" as *;
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color: $black;
+  background-color: $white;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (prefers-color-scheme: dark) {
+    color: $white;
+    background-color: $light-black;
+  }
+}
+
+h1 {
+  text-align: center;
+}
+
+input {
+  @include foreground-element;
+  @include foreground-spacing;
+}

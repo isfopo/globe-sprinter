@@ -1,33 +1,25 @@
-import { useState } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
-import "./App.css";
+import styles from "./App.module.scss";
+import { ConfigList } from "./components/lists/ConfigList";
+import { AddButton } from "./components/buttons/AddButton";
+import { Modals } from "./components/modals/Modals";
+import { useConfig } from "./hooks/useConfig";
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+export default () => {
+  const { config, loading } = useConfig();
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
+  if (loading) {
+    return <></>;
   }
 
   return (
-    <div className="container">
-      <div className="row">
-        <div>
-          <input
-            id="greet-input"
-            onChange={(e) => setName(e.currentTarget.value)}
-            placeholder="Enter a name..."
-          />
-          <button type="button" onClick={() => greet()}>
-            Greet
-          </button>
-        </div>
+    <div className={styles["container"]}>
+      <Modals />
+      <div className={styles["menu"]}>
+        <AddButton location="/" />
       </div>
-      <p>{greetMsg}</p>
+      <div className={styles["row"]}>
+        <ConfigList config={config} />
+      </div>
     </div>
   );
-}
-
-export default App;
+};
