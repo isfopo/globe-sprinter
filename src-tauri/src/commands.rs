@@ -5,8 +5,8 @@ use std::{
 };
 use tauri::{api::file, AppHandle};
 
-use crate::config::get_config;
 use crate::menu::generate_menu;
+use crate::{config::get_config, errors::emit_error};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
@@ -51,10 +51,13 @@ pub fn write_config(app_handle: AppHandle, json: String) -> String {
         }
     }
 
-    app_handle
+    match app_handle
         .tray_handle()
         .set_menu(generate_menu(get_config(&app_handle)))
-        .unwrap();
+    {
+        Ok(..) => (),
+        Err(..) => emit_error(&app_handle, "Unable to update menu"),
+    };
 
     match file::read_string(path.clone()) {
         Ok(config) => config,

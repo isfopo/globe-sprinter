@@ -5,10 +5,12 @@
 
 mod commands;
 mod config;
+mod errors;
 mod menu;
 
 use commands::{get_config_json, write_config};
 use config::{get_config, get_config_path};
+use errors::emit_error;
 use menu::generate_menu;
 
 use std::process::Command;
@@ -31,17 +33,20 @@ fn main() {
 
     let system_tray_event = |app: &AppHandle, event: SystemTrayEvent| match event {
         SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-            "config" => {
-                Command::new("open")
-                    .arg(get_config_path(app))
-                    .output()
-                    .expect("failed to execute process");
-            }
+            "config" => match Command::new("open").arg(get_config_path(app)).output() {
+                Ok(..) => (),
+                Err(..) => {
+                    emit_error(app, "failed to execute process");
+                }
+            },
             "reload" => {
                 app.tray_handle()
                     .set_menu(generate_menu(get_config(&app)))
                     .unwrap();
-                app.emit_all("reload", {}).unwrap();
+                match app.emit_all("reload", {}) {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Could not reload"),
+                }
             }
             "open" => {
                 if let Some(window) = app.get_window("main") {
@@ -59,20 +64,24 @@ fn main() {
             }
             "hide" => {
                 let window = app.get_window("main").unwrap();
-                window.hide().unwrap();
+                match window.hide() {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Could not hide window"),
+                };
             }
             "quit" => {
                 std::process::exit(0);
             }
             id => {
-                app.clipboard_manager()
-                    .write_text(id)
-                    .expect("failed to copy");
+                match app.clipboard_manager().write_text(id) {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Failed to copy command"),
+                }
 
-                Command::new("open")
-                    .arg("/bin/zsh")
-                    .output()
-                    .expect("failed to execute process");
+                match Command::new("open").arg("/bin/zsh").output() {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Failed to execute process"),
+                }
             }
         },
         _ => {}
