@@ -7,6 +7,12 @@
   border: none;
   padding: 2px 6px 3px 6px;
 
+  &:hover {
+    svg {
+      color: $white;
+    }
+  }
+
   svg {
     @include icon;
     width: 0.8rem;
