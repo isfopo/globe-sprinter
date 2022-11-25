@@ -21,5 +21,5 @@ export const NotificationContainer = () => {
     };
   }, []);
 
-  return <ToastContainer theme="dark" />;
+  return <ToastContainer theme="dark" position="top-left" />;
 };
