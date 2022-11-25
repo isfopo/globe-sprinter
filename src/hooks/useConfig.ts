@@ -12,6 +12,7 @@ export const useConfig = (): {
   config: Config;
   loading: boolean;
   insert: (location: string, key: string, command?: string) => void;
+  update: (location: string, key: string) => void;
   remove: (location: string) => void;
 } => {
   const [config, setConfig] = useRecoilState(configState);
@@ -54,6 +55,10 @@ export const useConfig = (): {
     [setConfig, config]
   );
 
+  const update = useCallback((location: string, key: string) => {
+    console.log("update");
+  }, []);
+
   const remove = useCallback(
     async (location: string) => {
       if (!config) return;
@@ -72,5 +77,5 @@ export const useConfig = (): {
     [setConfig, config]
   );
 
-  return { config: config ?? {}, loading: !config, insert, remove };
+  return { config: config ?? {}, loading: !config, insert, remove, update };
 };

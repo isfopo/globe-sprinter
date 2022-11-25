@@ -4,21 +4,20 @@ import { ButtonProps } from "../types";
 import styles from "./index.module.scss";
 
 export interface EditButtonProps extends ButtonProps {
-  title: string;
+  onClick: () => void;
   isCommand?: boolean;
 }
 
 export const EditButton: React.FC<EditButtonProps> = ({
-  location,
-  title,
+  onClick,
   isCommand = false,
 }) => {
   return (
     <button
-      title="Edit"
+      title="edit"
       type="button"
       className={styles["button"]}
-      onClick={() => {}}
+      onClick={onClick}
     >
       <Edit />
     </button>
