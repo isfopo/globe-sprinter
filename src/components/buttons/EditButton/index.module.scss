@@ -1,5 +1,6 @@
 @use "../../../styles/mixins.module.scss" as *;
 @use "../../../styles/colors.module.scss" as *;
+@use "../../../styles/variables.scss" as *;
 
 .button {
   background-color: transparent;
@@ -10,5 +11,7 @@
     @include icon;
     width: 0.8rem;
     color: $gray;
+    opacity: 0;
+    transition: opacity $transition-rate;
   }
 }

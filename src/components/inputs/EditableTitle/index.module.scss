@@ -1,0 +1,9 @@
+.title {
+  &:hover {
+    button {
+      svg {
+        opacity: 1;
+      }
+    }
+  }
+}
