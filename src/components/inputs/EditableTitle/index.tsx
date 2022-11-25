@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { useClickOutside } from "../../../hooks/useClickOutside";
 import { useConfig } from "../../../hooks/useConfig";
 import { EditButton } from "../../buttons/EditButton";
 import styles from "./index.module.scss";
@@ -13,6 +14,7 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
   location,
 }) => {
   const { update } = useConfig();
+  const outsideRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [value, setValue] = useState<string>(title);
 
@@ -21,10 +23,13 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
     setIsEditing(false);
   }, []);
 
+  useClickOutside(outsideRef, onSubmit);
+
   if (isEditing) {
     return (
       <span className={styles["input"]}>
         <input
+          ref={outsideRef}
           type="text"
           aria-label="title"
           value={value}
