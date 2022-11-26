@@ -46,7 +46,7 @@ export const useConfig = (): {
     async (location: string, key: string, command?: string) => {
       if (!config) return;
 
-      if (JSON.stringify(config).includes(key)) {
+      if (JSON.stringify(config).includes(`"${key}":`)) {
         toast.error("Duplicate keys not allowed");
         return;
       }
@@ -69,7 +69,7 @@ export const useConfig = (): {
 
       if (isCommand) {
       } else {
-        if (JSON.stringify(config).includes(value)) {
+        if (JSON.stringify(config).includes(`"${value}":`)) {
           toast.error("Duplicate keys not allowed");
           return;
         }
