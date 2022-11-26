@@ -4,30 +4,30 @@ import { useConfig } from "../../../hooks/useConfig";
 import { EditButton } from "../../buttons/EditButton";
 import styles from "./index.module.scss";
 
-export interface EditableTitleProps {
-  title: string;
+export interface EditableCommandProps {
+  command: string;
   location: string;
 }
 
-export const EditableTitle: React.FC<EditableTitleProps> = ({
-  title,
+export const EditableCommand: React.FC<EditableCommandProps> = ({
+  command,
   location,
 }) => {
   const { update } = useConfig();
   const outsideRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [value, setValue] = useState<string>(title);
+  const [value, setValue] = useState<string>(command);
 
   const onSubmit = useCallback(() => {
-    update(title, value);
+    // update(title, value);
     setIsEditing(false);
-  }, [title, value, setIsEditing]);
+  }, [command, value, setIsEditing]);
 
   useClickOutside(outsideRef, onSubmit);
 
   if (isEditing) {
     return (
-      <div className={styles["input"]}>
+      <span className={styles["input"]}>
         <input
           ref={outsideRef}
           type="text"
@@ -36,13 +36,13 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
           onChange={({ target }) => setValue(target.value)}
           onKeyDown={(event) => event.key === "Enter" && onSubmit()}
         />
-      </div>
+      </span>
     );
   }
 
   return (
-    <div className={styles["title"]}>
-      <p>{title}</p>
+    <div className={styles["command"]}>
+      <p>{command}</p>
       <EditButton location={location} onClick={() => setIsEditing(true)} />
     </div>
   );
