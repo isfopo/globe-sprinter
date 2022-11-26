@@ -44,6 +44,11 @@ export const useConfig = (): {
   const insert = useCallback(
     async (location: string, key: string, command?: string) => {
       if (!config) return;
+
+      if (JSON.stringify(config).includes(key)) {
+        return;
+      }
+
       const branch = location?.split("/").filter((step) => step) ?? [];
       let place = config;
       for (const step of branch) {
