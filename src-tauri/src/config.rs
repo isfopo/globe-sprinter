@@ -64,21 +64,18 @@ pub fn get_config_json(app_handle: AppHandle) -> String {
 
     match file::read_string(path.clone()) {
         Ok(config) => config,
-        Err(_err) => {
-            println!("{}", _err.to_string());
-            match File::create(path.clone()) {
-                Ok(mut file) => {
-                    write!(file, "{}", "{}").unwrap();
-                    format!("{}", "{}")
-                }
-                Err(_) => {
-                    create_dir(path.parent().unwrap()).unwrap();
-                    let mut file = File::create(path.clone()).unwrap();
-                    write!(file, "{}", "{}").unwrap();
-                    format!("{}", "{}")
-                }
+        Err(_err) => match File::create(path.clone()) {
+            Ok(mut file) => {
+                write!(file, "{}", "{}").unwrap();
+                format!("{}", "{}")
             }
-        }
+            Err(_) => {
+                create_dir(path.parent().unwrap()).unwrap();
+                let mut file = File::create(path.clone()).unwrap();
+                write!(file, "{}", "{}").unwrap();
+                format!("{}", "{}")
+            }
+        },
     }
 }
 
