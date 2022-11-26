@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
 import { renameKey } from "../helpers/objects";
 import { configState } from "../state/configState";
@@ -46,6 +47,7 @@ export const useConfig = (): {
       if (!config) return;
 
       if (JSON.stringify(config).includes(key)) {
+        toast.error("Duplicate keys not allowed");
         return;
       }
 
