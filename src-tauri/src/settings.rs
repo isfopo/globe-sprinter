@@ -1,5 +1,8 @@
+use jsonxf::pretty_print;
 use serde_derive::{Deserialize, Serialize};
+use serde_json::to_string;
 use std::{
+    fmt,
     fs::{create_dir, File},
     io::Write,
     path::PathBuf,
@@ -13,8 +16,11 @@ pub struct Settings {
 impl Settings {
     pub fn new() -> Self {
         Self {
-            shell_path: "/bin/zsh".to_string(),
+            shell_path: "/bin/zsh".to_string(), // determine default by platform
         }
+    }
+    pub fn to_string(&self) -> Result<String, String> {
+        pretty_print(&to_string(self).unwrap())
     }
 }
 
@@ -29,13 +35,13 @@ fn parse_settings(path: PathBuf) -> Settings {
         Ok(settings) => settings,
         Err(_err) => match File::create(path.clone()) {
             Ok(mut file) => {
-                write!(file, "{}", "{}").unwrap();
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
                 file::read_string(path.clone()).unwrap()
             }
             Err(_) => {
                 create_dir(path.parent().unwrap()).unwrap();
                 let mut file = File::create(path.clone()).unwrap();
-                write!(file, "{}", "{}").unwrap();
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
                 file::read_string(path.clone()).unwrap()
             }
         },
