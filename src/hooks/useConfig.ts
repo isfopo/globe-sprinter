@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
 import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { renameKey } from "../helpers/objects";
 import { configState } from "../state/configState";
 
 export interface Config {
@@ -12,7 +13,7 @@ export const useConfig = (): {
   config: Config;
   loading: boolean;
   insert: (location: string, key: string, command?: string) => void;
-  update: (location: string, key: string) => void;
+  update: (location: string, value: string, isCommand?: boolean) => void;
   remove: (location: string) => void;
 } => {
   const [config, setConfig] = useRecoilState(configState);
@@ -55,9 +56,14 @@ export const useConfig = (): {
     [setConfig, config]
   );
 
-  const update = useCallback((location: string, key: string) => {
-    console.log("update");
-  }, []);
+  const update = useCallback(
+    async (title: string, value: string, isCommand?: boolean) => {
+      if (!config) return;
+      console.log(title, value);
+      sync(JSON.parse(JSON.stringify(config).replace(title, value)));
+    },
+    []
+  );
 
   const remove = useCallback(
     async (location: string) => {

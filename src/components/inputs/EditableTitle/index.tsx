@@ -19,9 +19,9 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
   const [value, setValue] = useState<string>(title);
 
   const onSubmit = useCallback(() => {
-    console.log("submit");
+    update(title, value);
     setIsEditing(false);
-  }, []);
+  }, [title, value]);
 
   useClickOutside(outsideRef, onSubmit);
 
@@ -33,7 +33,7 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
           type="text"
           aria-label="title"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={({ target }) => setValue(target.value)}
           onKeyDown={(event) => event.key === "Enter" && onSubmit()}
         />
       </span>
