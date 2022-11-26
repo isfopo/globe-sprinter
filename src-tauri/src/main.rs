@@ -7,11 +7,13 @@ mod commands;
 mod config;
 mod errors;
 mod menu;
+mod settings;
 
 use commands::{get_config_json, write_config};
 use config::{get_config, get_config_path};
 use errors::emit_error;
 use menu::generate_menu;
+use settings::get_settings;
 
 use std::process::Command;
 use tauri::{App, AppHandle, ClipboardManager, Manager, RunEvent, SystemTray, SystemTrayEvent};
@@ -78,7 +80,9 @@ fn main() {
                     Err(..) => emit_error(app, "Failed to copy command"),
                 }
 
-                match Command::new("open").arg("/bin/zsh").output() {
+                let settings = get_settings(app);
+
+                match Command::new("open").arg(settings.shell_path).output() {
                     Ok(..) => (),
                     Err(..) => emit_error(app, "Failed to execute process"),
                 }
