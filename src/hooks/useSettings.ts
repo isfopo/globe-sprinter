@@ -32,9 +32,20 @@ export const useSettings = (): {
     get();
   }, []);
 
-  const update = useCallback((name: string, value: string) => {
-    console.log(name, value);
-  }, []);
+  const update = useCallback(
+    async (name: string, value: string) => {
+      if (!settings) return;
+
+      settings[name as keyof Settings] = value;
+
+      const updatedSettings = JSON.parse(
+        await invoke("write_settings", { json: JSON.stringify(settings) })
+      );
+
+      setSettings(updatedSettings);
+    },
+    [settings]
+  );
 
   return { settings, loading: !settings, update };
 };

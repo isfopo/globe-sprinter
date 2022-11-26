@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import styles from "./index.module.scss";
 
@@ -15,7 +16,19 @@ export const SettingInput: React.FC<SettingInputProps> = ({
 }) => {
   const outsideRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState(initialValue);
-  useClickOutside(outsideRef, () => onSubmit(name, value));
+
+  const handleSubmit = useCallback(() => {
+    try {
+      if (value === initialValue) return;
+
+      onSubmit(name, value);
+      toast(`${name} was updated to "${value}"`);
+    } catch (e) {
+      toast.error("Setting could not be updated");
+    }
+  }, [onSubmit, initialValue, value, name]);
+
+  useClickOutside(outsideRef, handleSubmit);
 
   return (
     <span className={styles["container"]}>
@@ -26,7 +39,7 @@ export const SettingInput: React.FC<SettingInputProps> = ({
         aria-label="title"
         value={value}
         onChange={({ target }) => setValue(target.value)}
-        onKeyDown={(event) => event.key === "Enter" && onSubmit(name, value)}
+        onKeyDown={(event) => event.key === "Enter" && handleSubmit()}
       />
     </span>
   );
