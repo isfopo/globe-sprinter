@@ -13,6 +13,7 @@
   "dependencies": {
     "@szhsin/react-menu": "^3.3.0",
     "@tauri-apps/api": "^1.2.0",
+    "change-case": "^4.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",

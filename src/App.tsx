@@ -4,6 +4,7 @@ import { AddButton } from "./components/buttons/AddButton";
 import { Modals } from "./components/modals/Modals";
 import { useConfig } from "./hooks/useConfig";
 import { NotificationContainer } from "./components/NotificationContainer";
+import { SettingsButton } from "./components/buttons/SettingsButton";
 
 export default () => {
   const { config, loading } = useConfig();
@@ -18,6 +19,7 @@ export default () => {
       <NotificationContainer />
       <div className={styles["menu"]}>
         <AddButton location="/" />
+        <SettingsButton />
       </div>
       <div className={styles["row"]}>
         <ConfigList config={config} />

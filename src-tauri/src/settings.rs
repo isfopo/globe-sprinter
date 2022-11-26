@@ -1,88 +1,88 @@
 use jsonxf::pretty_print;
 use serde_derive::{Deserialize, Serialize};
-use std::collections::BTreeMap;
-use std::path::PathBuf;
+use serde_json::to_string;
 use std::{
     fs::{create_dir, File},
     io::Write,
+    path::PathBuf,
 };
 use tauri::{api::file, AppHandle};
-
-use crate::errors::emit_error;
-use crate::menu::generate_menu;
-
-// https://stackoverflow.com/questions/33895090/serialize-json-in-a-recursive-struct
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum ConfigItem {
-    String(String),
-    Directory(Directory),
+pub struct Settings {
+    pub shell_path: String,
 }
 
-pub type Directory = BTreeMap<String, ConfigItem>;
+impl Settings {
+    pub fn new() -> Self {
+        Self {
+            shell_path: "/bin/zsh".to_string(), // determine default by platform
+        }
+    }
+    pub fn to_string(&self) -> Result<String, String> {
+        pretty_print(&to_string(self).unwrap())
+    }
+}
 
-pub type Config = BTreeMap<String, ConfigItem>;
-
-pub fn get_config_path(app: &AppHandle) -> PathBuf {
+pub fn get_settings_path(app: &AppHandle) -> PathBuf {
     let mut path = app.path_resolver().app_data_dir().unwrap();
-    path.push("config.json");
+    path.push("settings.json");
     return path;
 }
 
-pub fn parse_config(path: PathBuf) -> Config {
+fn parse_settings(path: PathBuf) -> Settings {
     let json = match file::read_string(path.clone()) {
-        Ok(config) => config,
+        Ok(settings) => settings,
         Err(_err) => match File::create(path.clone()) {
             Ok(mut file) => {
-                write!(file, "{}", "{}").unwrap();
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
                 file::read_string(path.clone()).unwrap()
             }
             Err(_) => {
                 create_dir(path.parent().unwrap()).unwrap();
                 let mut file = File::create(path.clone()).unwrap();
-                write!(file, "{}", "{}").unwrap();
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
                 file::read_string(path.clone()).unwrap()
             }
         },
     };
 
-    match serde_json::from_str::<Config>(&json) {
+    match serde_json::from_str::<Settings>(&json) {
         Ok(out) => out,
-        Err(..) => Config::new(),
+        Err(..) => Settings::new(),
     }
 }
 
-pub fn get_config(app: &AppHandle) -> Config {
-    let path = get_config_path(app);
-    parse_config(path)
+pub fn get_settings(app: &AppHandle) -> Settings {
+    let path = get_settings_path(app);
+    parse_settings(path)
 }
 
 #[tauri::command]
-pub fn get_config_json(app_handle: AppHandle) -> String {
+pub fn get_settings_json(app_handle: AppHandle) -> String {
     let mut path = app_handle.path_resolver().app_data_dir().unwrap();
-    path.push("config.json");
+    path.push("settings.json");
 
     match file::read_string(path.clone()) {
-        Ok(config) => config,
+        Ok(settings) => settings,
         Err(_err) => match File::create(path.clone()) {
             Ok(mut file) => {
-                write!(file, "{}", "{}").unwrap();
-                format!("{}", "{}")
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
+                file::read_string(path.clone()).unwrap()
             }
             Err(_) => {
                 create_dir(path.parent().unwrap()).unwrap();
                 let mut file = File::create(path.clone()).unwrap();
-                write!(file, "{}", "{}").unwrap();
-                format!("{}", "{}")
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
+                file::read_string(path.clone()).unwrap()
             }
         },
     }
 }
 
 #[tauri::command]
-pub fn write_config(app_handle: AppHandle, json: String) -> String {
+pub fn write_settings(app_handle: AppHandle, json: String) -> String {
     let mut path = app_handle.path_resolver().app_data_dir().unwrap();
-    path.push("config.json");
+    path.push("settings.json");
 
     match File::create(path.clone()) {
         Ok(mut file) => {
@@ -95,16 +95,8 @@ pub fn write_config(app_handle: AppHandle, json: String) -> String {
         }
     }
 
-    match app_handle
-        .tray_handle()
-        .set_menu(generate_menu(get_config(&app_handle)))
-    {
-        Ok(..) => (),
-        Err(..) => emit_error(&app_handle, "Unable to update menu"),
-    };
-
     match file::read_string(path.clone()) {
-        Ok(config) => config,
+        Ok(settings) => settings,
         Err(_err) => {
             println!("{}", _err.to_string());
             match File::create(path.clone()) {
