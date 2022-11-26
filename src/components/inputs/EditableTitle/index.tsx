@@ -13,13 +13,13 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
   title,
   location,
 }) => {
-  const { update } = useConfig();
+  const { updateKey } = useConfig();
   const outsideRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [value, setValue] = useState<string>(title);
 
   const onSubmit = useCallback(() => {
-    update(title, value);
+    updateKey(title, value);
     setIsEditing(false);
   }, [title, value, setIsEditing]);
 

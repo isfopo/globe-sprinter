@@ -14,7 +14,8 @@ export const useConfig = (): {
   config: Config;
   loading: boolean;
   insert: (location: string, key: string, command?: string) => void;
-  update: (location: string, value: string, isCommand?: boolean) => void;
+  updateKey: (title: string, value: string) => void;
+  updateCommand: (location: string, key: string, value: string) => void;
   remove: (location: string) => void;
 } => {
   const [config, setConfig] = useRecoilState(configState);
@@ -63,32 +64,43 @@ export const useConfig = (): {
     [setConfig, config]
   );
 
-  const update = useCallback(
-    async (title: string, value: string, isCommand?: boolean) => {
+  const updateKey = useCallback(
+    async (title: string, value: string) => {
       if (!config) return;
 
-      if (isCommand) {
-      } else {
-        if (title === value) {
-          return;
-        }
-        if (JSON.stringify(config).includes(`"${value}":`)) {
-          toast.error("Duplicate keys not allowed");
-          return;
-        }
-        setConfig(
-          JSON.parse(
-            await invoke("write_config", {
-              json: JSON.stringify(config).replace(
-                `"${title}":`,
-                `"${value}":`
-              ),
-            })
-          )
-        );
+      if (title === value) {
+        return;
       }
+      if (JSON.stringify(config).includes(`"${value}":`)) {
+        toast.error("Duplicate keys not allowed");
+        return;
+      }
+      setConfig(
+        JSON.parse(
+          await invoke("write_config", {
+            json: JSON.stringify(config).replace(`"${title}":`, `"${value}":`),
+          })
+        )
+      );
     },
     [config, setConfig]
+  );
+
+  const updateCommand = useCallback(
+    (location: string, key: string, value: string) => {
+      if (!config) return;
+      const branch = location?.split("/").filter((step) => step) ?? [];
+
+      let place = config;
+      for (const step of branch) {
+        place = place[step] as Config;
+      }
+      if (key) {
+        place[key] = value;
+      }
+      sync(config);
+    },
+    [config, sync]
   );
 
   const remove = useCallback(
@@ -109,5 +121,12 @@ export const useConfig = (): {
     [setConfig, config]
   );
 
-  return { config: config ?? {}, loading: !config, insert, remove, update };
+  return {
+    config: config ?? {},
+    loading: !config,
+    insert,
+    updateKey,
+    updateCommand,
+    remove,
+  };
 };

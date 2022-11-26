@@ -22,7 +22,7 @@ export const CommandCell: React.FC<CommandCellProps> = ({
       <span>
         <RemoveButton location={location} title={title} isCommand />
       </span>
-      <EditableCommand location={location} command={command} />
+      <EditableCommand location={location} title={title} command={command} />
     </span>
   </div>
 );

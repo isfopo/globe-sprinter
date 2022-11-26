@@ -6,20 +6,22 @@ import styles from "./index.module.scss";
 
 export interface EditableCommandProps {
   command: string;
+  title: string;
   location: string;
 }
 
 export const EditableCommand: React.FC<EditableCommandProps> = ({
   command,
+  title,
   location,
 }) => {
-  const { update } = useConfig();
+  const { updateCommand } = useConfig();
   const outsideRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [value, setValue] = useState<string>(command);
 
   const onSubmit = useCallback(() => {
-    // update(title, value);
+    updateCommand(location, title, value);
     setIsEditing(false);
   }, [command, value, setIsEditing]);
 
