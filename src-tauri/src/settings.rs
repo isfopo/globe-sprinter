@@ -23,7 +23,7 @@ impl Settings {
     }
 }
 
-fn get_settings_path(app: &AppHandle) -> PathBuf {
+pub fn get_settings_path(app: &AppHandle) -> PathBuf {
     let mut path = app.path_resolver().app_data_dir().unwrap();
     path.push("settings.json");
     return path;
