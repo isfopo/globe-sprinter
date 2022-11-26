@@ -29,7 +29,7 @@ export const EditableCommand: React.FC<EditableCommandProps> = ({
 
   if (isEditing) {
     return (
-      <span className={styles["input"]}>
+      <div className={styles["input"]}>
         <input
           ref={outsideRef}
           type="text"
@@ -38,7 +38,7 @@ export const EditableCommand: React.FC<EditableCommandProps> = ({
           onChange={({ target }) => setValue(target.value)}
           onKeyDown={(event) => event.key === "Enter" && onSubmit()}
         />
-      </span>
+      </div>
     );
   }
 
