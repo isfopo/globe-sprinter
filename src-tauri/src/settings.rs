@@ -15,11 +15,14 @@ pub struct Settings {
 impl Settings {
     pub fn new() -> Self {
         Self {
-            shell_path: "/bin/zsh".to_string(), // determine default by platform
+            shell_path: Settings::get_default_path(), // determine default by platform
         }
     }
     pub fn to_string(&self) -> Result<String, String> {
         pretty_print(&to_string(self).unwrap())
+    }
+    fn get_default_path() -> String {
+        "/bin/zsh".to_string()
     }
 }
 
