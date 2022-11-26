@@ -68,7 +68,7 @@ export const useConfig = (): {
       setConfig(
         JSON.parse(
           await invoke("write_config", {
-            json: JSON.stringify(config).replace(`"${title}"`, `"${value}"`),
+            json: JSON.stringify(config).replace(`"${title}":`, `"${value}":`),
           })
         )
       );
