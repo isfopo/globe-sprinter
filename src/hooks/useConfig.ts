@@ -67,13 +67,23 @@ export const useConfig = (): {
     async (title: string, value: string, isCommand?: boolean) => {
       if (!config) return;
 
-      setConfig(
-        JSON.parse(
-          await invoke("write_config", {
-            json: JSON.stringify(config).replace(`"${title}":`, `"${value}":`),
-          })
-        )
-      );
+      if (isCommand) {
+      } else {
+        if (JSON.stringify(config).includes(value)) {
+          toast.error("Duplicate keys not allowed");
+          return;
+        }
+        setConfig(
+          JSON.parse(
+            await invoke("write_config", {
+              json: JSON.stringify(config).replace(
+                `"${title}":`,
+                `"${value}":`
+              ),
+            })
+          )
+        );
+      }
     },
     [config, setConfig]
   );
