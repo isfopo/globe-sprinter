@@ -3,13 +3,15 @@
     windows_subsystem = "windows"
 )]
 
-mod commands;
 mod config;
+mod errors;
 mod menu;
+mod settings;
 
-use commands::{get_config_json, write_config};
-use config::{get_config, get_config_path};
+use config::{get_config, get_config_json, get_config_path, write_config};
+use errors::emit_error;
 use menu::generate_menu;
+use settings::{get_settings, get_settings_json, get_settings_path, write_settings};
 
 use std::process::Command;
 use tauri::{App, AppHandle, ClipboardManager, Manager, RunEvent, SystemTray, SystemTrayEvent};
@@ -31,17 +33,26 @@ fn main() {
 
     let system_tray_event = |app: &AppHandle, event: SystemTrayEvent| match event {
         SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-            "config" => {
-                Command::new("open")
-                    .arg(get_config_path(app))
-                    .output()
-                    .expect("failed to execute process");
-            }
+            "config" => match Command::new("open").arg(get_config_path(app)).output() {
+                Ok(..) => (),
+                Err(..) => {
+                    emit_error(app, "failed to execute process");
+                }
+            },
+            "settings" => match Command::new("open").arg(get_settings_path(app)).output() {
+                Ok(..) => (),
+                Err(..) => {
+                    emit_error(app, "failed to execute process");
+                }
+            },
             "reload" => {
                 app.tray_handle()
                     .set_menu(generate_menu(get_config(&app)))
                     .unwrap();
-                app.emit_all("reload", {}).unwrap();
+                match app.emit_all("reload", {}) {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Could not reload"),
+                }
             }
             "open" => {
                 if let Some(window) = app.get_window("main") {
@@ -59,20 +70,26 @@ fn main() {
             }
             "hide" => {
                 let window = app.get_window("main").unwrap();
-                window.hide().unwrap();
+                match window.hide() {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Could not hide window"),
+                };
             }
             "quit" => {
                 std::process::exit(0);
             }
             id => {
-                app.clipboard_manager()
-                    .write_text(id)
-                    .expect("failed to copy");
+                match app.clipboard_manager().write_text(id) {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Failed to copy command"),
+                }
 
-                Command::new("open")
-                    .arg("/bin/zsh")
-                    .output()
-                    .expect("failed to execute process");
+                let settings = get_settings(app);
+
+                match Command::new("open").arg(settings.shell_path).output() {
+                    Ok(..) => (),
+                    Err(..) => emit_error(app, "Failed to execute process"),
+                }
             }
         },
         _ => {}
@@ -86,7 +103,12 @@ fn main() {
     };
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_config_json, write_config])
+        .invoke_handler(tauri::generate_handler![
+            get_config_json,
+            write_config,
+            get_settings_json,
+            write_settings
+        ])
         .setup(setup)
         .on_system_tray_event(system_tray_event)
         .build(tauri::generate_context!())

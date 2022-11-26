@@ -1,8 +1,9 @@
 @use "./colors.module.scss" as *;
 @use "./mixins.module.scss" as *;
+@use "./variables.scss" as *;
 
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: $base-font-family;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -14,6 +15,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --toastify-font-family: $base-font-family;
+  --toastify-color-dark: #232323;
+  --toastify-color-error: #ea5e4f;
 
   @media (prefers-color-scheme: dark) {
     color: $white;

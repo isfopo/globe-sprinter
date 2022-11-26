@@ -1,6 +1,7 @@
 import { AddCommandModal } from "./AddCommandModal";
 import { AddDirectoryModal } from "./AddDirectoryModal";
 import { RemoveModal } from "./RemoveModal";
+import { SettingsModal } from "./SettingsModal";
 
 export const Modals = () => {
   return (
@@ -8,6 +9,7 @@ export const Modals = () => {
       <AddDirectoryModal />
       <AddCommandModal />
       <RemoveModal />
+      <SettingsModal />
     </>
   );
 };
