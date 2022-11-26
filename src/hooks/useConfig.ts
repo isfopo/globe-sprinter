@@ -1,9 +1,8 @@
 import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRecoilState } from "recoil";
-import { renameKey } from "../helpers/objects";
 import { configState } from "../state/configState";
 
 export interface Config {
@@ -71,6 +70,10 @@ export const useConfig = (): {
       if (title === value) {
         return;
       }
+      if (!value) {
+        toast.error("New key must not be blank");
+        return;
+      }
       if (JSON.stringify(config).includes(`"${value}":`)) {
         toast.error("Duplicate keys not allowed");
         return;
@@ -89,6 +92,11 @@ export const useConfig = (): {
   const updateCommand = useCallback(
     (location: string, key: string, value: string) => {
       if (!config) return;
+      if (!value) {
+        toast.error("New command must not be blank");
+        return;
+      }
+
       const branch = location?.split("/").filter((step) => step) ?? [];
 
       let place = config;
