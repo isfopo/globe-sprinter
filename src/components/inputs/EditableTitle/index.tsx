@@ -21,7 +21,7 @@ export const EditableTitle: React.FC<EditableTitleProps> = ({
   const onSubmit = useCallback(() => {
     update(title, value);
     setIsEditing(false);
-  }, [title, value]);
+  }, [title, value, setIsEditing]);
 
   useClickOutside(outsideRef, onSubmit);
 
