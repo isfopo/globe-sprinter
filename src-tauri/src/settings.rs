@@ -22,7 +22,15 @@ impl Settings {
         pretty_print(&to_string(self).unwrap())
     }
     fn get_default_path() -> String {
-        "/bin/zsh".to_string()
+        if cfg!(target_os = "macos") {
+            "/bin/zsh".to_string()
+        } else if cfg!(target_os = "linux") {
+            "/bin/bash".to_string()
+        } else if cfg!(target_os = "windows") {
+            "%SystemRoot%\\System32\\cmd.exe".to_string()
+        } else {
+            "".to_string()
+        }
     }
 }
 
