@@ -1,0 +1,21 @@
+.title {
+  display: flex;
+  p {
+    padding-right: 0.1rem !important;
+  }
+
+  &:hover {
+    button {
+      svg {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.input {
+  input {
+    margin: 1rem 0.6em;
+    padding-left: 0.6em;
+  }
+}

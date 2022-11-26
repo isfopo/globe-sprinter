@@ -1,4 +1,6 @@
 import { RemoveButton } from "../../buttons/RemoveButton";
+import { EditableCommand } from "../../inputs/EditableCommand";
+import { EditableTitle } from "../../inputs/EditableTitle";
 import styles from "../index.module.scss";
 
 export interface CommandCellProps {
@@ -15,12 +17,12 @@ export const CommandCell: React.FC<CommandCellProps> = ({
   hide,
 }) => (
   <div className={`${styles["container"]} ${hide ? styles["hide"] : ""}`}>
-    <p>{title}</p>
+    <EditableTitle location={location} title={title} />
     <span>
       <span>
         <RemoveButton location={location} title={title} isCommand />
       </span>
-      <p>{command}</p>
+      <EditableCommand location={location} title={title} command={command} />
     </span>
   </div>
 );
