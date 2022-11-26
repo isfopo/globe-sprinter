@@ -69,6 +69,9 @@ export const useConfig = (): {
 
       if (isCommand) {
       } else {
+        if (title === value) {
+          return;
+        }
         if (JSON.stringify(config).includes(`"${value}":`)) {
           toast.error("Duplicate keys not allowed");
           return;
