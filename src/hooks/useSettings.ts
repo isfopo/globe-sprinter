@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { listen } from "@tauri-apps/api/event";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { settingsState } from "../state/settingsState";
 
@@ -16,6 +16,7 @@ export class Settings {
 export const useSettings = (): {
   settings: Settings | undefined;
   loading: boolean;
+  update: (name: string, value: string) => void;
 } => {
   const [settings, setSettings] = useRecoilState(settingsState);
 
@@ -31,5 +32,9 @@ export const useSettings = (): {
     get();
   }, []);
 
-  return { settings, loading: !settings };
+  const update = useCallback((name: string, value: string) => {
+    console.log(name, value);
+  }, []);
+
+  return { settings, loading: !settings, update };
 };

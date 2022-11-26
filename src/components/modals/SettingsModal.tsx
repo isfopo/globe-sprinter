@@ -6,7 +6,7 @@ import { useSettings } from "../../hooks/useSettings";
 import { SettingInput } from "../inputs/SettingInput";
 
 export const SettingsModal = () => {
-  const { settings } = useSettings();
+  const { settings, update } = useSettings();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { close } = useModalListener(
     "settingsModal",
@@ -20,11 +20,11 @@ export const SettingsModal = () => {
 
   return (
     <ModalBase isOpen={isOpen} onRequestClose={close}>
-      <form className={styles["container"]}>
+      <div className={styles["container"]}>
         {Object.entries(settings).map(([name, value], key) => (
-          <SettingInput name={name} value={value} key={key} />
+          <SettingInput name={name} value={value} key={key} onSubmit={update} />
         ))}
-      </form>
+      </div>
     </ModalBase>
   );
 };
