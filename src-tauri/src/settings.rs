@@ -2,7 +2,6 @@ use jsonxf::pretty_print;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::to_string;
 use std::{
-    fmt,
     fs::{create_dir, File},
     io::Write,
     path::PathBuf,
