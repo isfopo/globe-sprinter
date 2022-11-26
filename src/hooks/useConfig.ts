@@ -59,10 +59,16 @@ export const useConfig = (): {
   const update = useCallback(
     async (title: string, value: string, isCommand?: boolean) => {
       if (!config) return;
-      console.log(title, value);
-      sync(JSON.parse(JSON.stringify(config).replace(title, value)));
+
+      setConfig(
+        JSON.parse(
+          await invoke("write_config", {
+            json: JSON.stringify(config).replace(`"${title}"`, `"${value}"`),
+          })
+        )
+      );
     },
-    []
+    [config, setConfig]
   );
 
   const remove = useCallback(
