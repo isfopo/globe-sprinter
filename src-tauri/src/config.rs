@@ -1,11 +1,15 @@
+use jsonxf::pretty_print;
 use serde_derive::{Deserialize, Serialize};
 use std::collections::BTreeMap;
+use std::path::PathBuf;
 use std::{
     fs::{create_dir, File},
     io::Write,
-    path::PathBuf,
 };
 use tauri::{api::file, AppHandle};
+
+use crate::errors::emit_error;
+use crate::menu::generate_menu;
 
 // https://stackoverflow.com/questions/33895090/serialize-json-in-a-recursive-struct
 #[derive(Debug, Serialize, Deserialize)]
@@ -51,4 +55,73 @@ pub fn parse_config(path: PathBuf) -> Config {
 pub fn get_config(app: &AppHandle) -> Config {
     let path = get_config_path(app);
     parse_config(path)
+}
+
+#[tauri::command]
+pub fn get_config_json(app_handle: AppHandle) -> String {
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
+    path.push("config.json");
+
+    match file::read_string(path.clone()) {
+        Ok(config) => config,
+        Err(_err) => {
+            println!("{}", _err.to_string());
+            match File::create(path.clone()) {
+                Ok(mut file) => {
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+                Err(_) => {
+                    create_dir(path.parent().unwrap()).unwrap();
+                    let mut file = File::create(path.clone()).unwrap();
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+            }
+        }
+    }
+}
+
+#[tauri::command]
+pub fn write_config(app_handle: AppHandle, json: String) -> String {
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
+    path.push("config.json");
+
+    match File::create(path.clone()) {
+        Ok(mut file) => {
+            write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
+        }
+        Err(_) => {
+            create_dir(path.parent().unwrap()).unwrap();
+            let mut file = File::create(path.clone()).unwrap();
+            write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
+        }
+    }
+
+    match app_handle
+        .tray_handle()
+        .set_menu(generate_menu(get_config(&app_handle)))
+    {
+        Ok(..) => (),
+        Err(..) => emit_error(&app_handle, "Unable to update menu"),
+    };
+
+    match file::read_string(path.clone()) {
+        Ok(config) => config,
+        Err(_err) => {
+            println!("{}", _err.to_string());
+            match File::create(path.clone()) {
+                Ok(mut file) => {
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+                Err(_) => {
+                    create_dir(path.parent().unwrap()).unwrap();
+                    let mut file = File::create(path.clone()).unwrap();
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+            }
+        }
+    }
 }

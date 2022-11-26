@@ -3,14 +3,12 @@
     windows_subsystem = "windows"
 )]
 
-mod commands;
 mod config;
 mod errors;
 mod menu;
 mod settings;
 
-use commands::{get_config_json, write_config};
-use config::{get_config, get_config_path};
+use config::{get_config, get_config_json, get_config_path, write_config};
 use errors::emit_error;
 use menu::generate_menu;
 use settings::get_settings;
