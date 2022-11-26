@@ -11,7 +11,7 @@ mod settings;
 use config::{get_config, get_config_json, get_config_path, write_config};
 use errors::emit_error;
 use menu::generate_menu;
-use settings::get_settings;
+use settings::{get_settings, get_settings_json, write_settings};
 
 use std::process::Command;
 use tauri::{App, AppHandle, ClipboardManager, Manager, RunEvent, SystemTray, SystemTrayEvent};
@@ -97,7 +97,12 @@ fn main() {
     };
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_config_json, write_config])
+        .invoke_handler(tauri::generate_handler![
+            get_config_json,
+            write_config,
+            get_settings_json,
+            write_settings
+        ])
         .setup(setup)
         .on_system_tray_event(system_tray_event)
         .build(tauri::generate_context!())

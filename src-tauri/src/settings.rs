@@ -56,3 +56,61 @@ pub fn get_settings(app: &AppHandle) -> Settings {
     let path = get_settings_path(app);
     parse_settings(path)
 }
+
+#[tauri::command]
+pub fn get_settings_json(app_handle: AppHandle) -> String {
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
+    path.push("settings.json");
+
+    match file::read_string(path.clone()) {
+        Ok(settings) => settings,
+        Err(_err) => match File::create(path.clone()) {
+            Ok(mut file) => {
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
+                file::read_string(path.clone()).unwrap()
+            }
+            Err(_) => {
+                create_dir(path.parent().unwrap()).unwrap();
+                let mut file = File::create(path.clone()).unwrap();
+                write!(file, "{}", Settings::new().to_string().unwrap()).unwrap();
+                file::read_string(path.clone()).unwrap()
+            }
+        },
+    }
+}
+
+#[tauri::command]
+pub fn write_settings(app_handle: AppHandle, json: String) -> String {
+    let mut path = app_handle.path_resolver().app_data_dir().unwrap();
+    path.push("settings.json");
+
+    match File::create(path.clone()) {
+        Ok(mut file) => {
+            write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
+        }
+        Err(_) => {
+            create_dir(path.parent().unwrap()).unwrap();
+            let mut file = File::create(path.clone()).unwrap();
+            write!(file, "{}", pretty_print(&json).unwrap()).unwrap();
+        }
+    }
+
+    match file::read_string(path.clone()) {
+        Ok(settings) => settings,
+        Err(_err) => {
+            println!("{}", _err.to_string());
+            match File::create(path.clone()) {
+                Ok(mut file) => {
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+                Err(_) => {
+                    create_dir(path.parent().unwrap()).unwrap();
+                    let mut file = File::create(path.clone()).unwrap();
+                    write!(file, "{}", "{}").unwrap();
+                    format!("{}", "{}")
+                }
+            }
+        }
+    }
+}
