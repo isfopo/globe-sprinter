@@ -6,31 +6,23 @@ use std::{
     io::Write,
     path::PathBuf,
 };
+use crate::platform::select_by_platform;
 use tauri::{api::file, AppHandle};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Settings {
+    pub terminal: String,
     pub shell_path: String,
 }
 
 impl Settings {
     pub fn new() -> Self {
         Self {
-            shell_path: Settings::get_default_path(), // determine default by platform
+            terminal: select_by_platform("wt".to_string(),  "open".to_string(), Option::None),
+            shell_path: select_by_platform("%SystemRoot%\\System32\\cmd.exe".to_string(),  "/bin/zsh".to_string(), Option::Some("/bin/bash".to_string())),
         }
     }
     pub fn to_string(&self) -> Result<String, String> {
         pretty_print(&to_string(self).unwrap())
-    }
-    fn get_default_path() -> String {
-        if cfg!(target_os = "macos") {
-            "/bin/zsh".to_string()
-        } else if cfg!(target_os = "linux") {
-            "/bin/bash".to_string()
-        } else if cfg!(target_os = "windows") {
-            "%SystemRoot%\\System32\\cmd.exe".to_string()
-        } else {
-            "".to_string()
-        }
     }
 }
 
