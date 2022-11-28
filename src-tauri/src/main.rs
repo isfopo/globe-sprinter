@@ -86,7 +86,7 @@ fn main() {
 
                 let settings = get_settings(app);
 
-                match Command::new("open").arg(settings.shell_path).output() {
+                match Command::new(settings.terminal).arg(settings.shell_path).output() {
                     Ok(..) => (),
                     Err(..) => emit_error(app, "Failed to execute process"),
                 }
