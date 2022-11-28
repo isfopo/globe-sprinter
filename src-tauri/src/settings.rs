@@ -6,6 +6,7 @@ use std::{
     io::Write,
     path::PathBuf,
 };
+use crate::platform::select_by_platform;
 use tauri::{api::file, AppHandle};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Settings {
@@ -16,34 +17,12 @@ pub struct Settings {
 impl Settings {
     pub fn new() -> Self {
         Self {
-            terminal: Settings::get_default_terminal(),
-            shell_path: Settings::get_default_shell_path(),
+            terminal: select_by_platform("wt".to_string(),  "open".to_string(), Option::None),
+            shell_path: select_by_platform("%SystemRoot%\\System32\\cmd.exe".to_string(),  "/bin/zsh".to_string(), Option::Some("/bin/bash".to_string())),
         }
     }
     pub fn to_string(&self) -> Result<String, String> {
         pretty_print(&to_string(self).unwrap())
-    }
-    fn get_default_shell_path() -> String {
-        if cfg!(target_os = "macos") {
-            "/bin/zsh".to_string()
-        } else if cfg!(target_os = "linux") {
-            "/bin/bash".to_string()
-        } else if cfg!(target_os = "windows") {
-            "%SystemRoot%\\System32\\cmd.exe".to_string()
-        } else {
-            "".to_string()
-        }
-    }
-    fn get_default_terminal() -> String {
-        if cfg!(target_os = "macos") {
-            "open".to_string()
-        } else if cfg!(target_os = "linux") {
-            "open".to_string()
-        } else if cfg!(target_os = "windows") {
-            "wt".to_string()
-        } else {
-            "".to_string()
-        }
     }
 }
 
