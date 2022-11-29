@@ -1,3 +1,4 @@
+use crate::platform::select_by_platform;
 use jsonxf::pretty_print;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::to_string;
@@ -6,7 +7,6 @@ use std::{
     io::Write,
     path::PathBuf,
 };
-use crate::platform::select_by_platform;
 use tauri::{api::file, AppHandle};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Settings {
@@ -17,8 +17,16 @@ pub struct Settings {
 impl Settings {
     pub fn new() -> Self {
         Self {
-            terminal: select_by_platform("wt".to_string(),  "open".to_string(), Option::None),
-            shell_path: select_by_platform("%SystemRoot%\\System32\\cmd.exe".to_string(),  "/bin/zsh".to_string(), Option::Some("/bin/bash".to_string())),
+            terminal: select_by_platform(
+                "wt".to_string(),
+                "Terminal.app".to_string(),
+                Option::None,
+            ),
+            shell_path: select_by_platform(
+                "%SystemRoot%\\System32\\cmd.exe".to_string(),
+                "/bin/zsh".to_string(),
+                Option::Some("/bin/bash".to_string()),
+            ),
         }
     }
     pub fn to_string(&self) -> Result<String, String> {
