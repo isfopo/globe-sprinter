@@ -102,9 +102,24 @@ fn main() {
 
                 let settings = get_settings(app);
 
-                match Command::new(settings.terminal).arg(settings.shell_path).output() {
-                    Ok(..) => (),
-                    Err(..) => emit_error(app, "Failed to execute process"),
+                if cfg!(target_os = "windows") {
+                    match Command::new(settings.terminal)
+                        .arg(settings.shell_path)
+                        .output()
+                    {
+                        Ok(..) => (),
+                        Err(..) => emit_error(app, "Failed to execute process"),
+                    }
+                } else {
+                    match Command::new("open")
+                        .arg("-a")
+                        .arg(settings.terminal)
+                        .arg(settings.shell_path)
+                        .output()
+                    {
+                        Ok(..) => (),
+                        Err(..) => emit_error(app, "Failed to execute process"),
+                    }
                 }
             }
         },
