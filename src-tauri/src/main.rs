@@ -6,14 +6,14 @@
 mod config;
 mod errors;
 mod menu;
-mod settings;
 mod platform;
+mod settings;
 
 use config::{get_config, get_config_json, get_config_path, write_config};
 use errors::emit_error;
 use menu::generate_menu;
-use settings::{get_settings, get_settings_json, get_settings_path, write_settings};
 use platform::select_by_platform;
+use settings::{get_settings, get_settings_json, get_settings_path, write_settings};
 
 use std::process::Command;
 use tauri::{App, AppHandle, ClipboardManager, Manager, RunEvent, SystemTray, SystemTrayEvent};
@@ -35,13 +35,27 @@ fn main() {
 
     let system_tray_event = |app: &AppHandle, event: SystemTrayEvent| match event {
         SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
-            "config" => match Command::new(select_by_platform("explorer", "open", Option::Some("xdg-open"))).arg(get_config_path(app)).output() {
+            "config" => match Command::new(select_by_platform(
+                "explorer",
+                "open",
+                Option::Some("xdg-open"),
+            ))
+            .arg(get_config_path(app))
+            .output()
+            {
                 Ok(..) => (),
                 Err(e) => {
                     emit_error(app, &e.to_string());
                 }
             },
-            "settings" => match Command::new(select_by_platform("explorer", "open", Option::Some("xdg-open"))).arg(get_settings_path(app)).output() {
+            "settings" => match Command::new(select_by_platform(
+                "explorer",
+                "open",
+                Option::Some("xdg-open"),
+            ))
+            .arg(get_settings_path(app))
+            .output()
+            {
                 Ok(..) => (),
                 Err(..) => {
                     emit_error(app, "failed to execute process");
@@ -88,9 +102,24 @@ fn main() {
 
                 let settings = get_settings(app);
 
-                match Command::new(settings.terminal).arg(settings.shell_path).output() {
-                    Ok(..) => (),
-                    Err(..) => emit_error(app, "Failed to execute process"),
+                if cfg!(target_os = "windows") {
+                    match Command::new(settings.terminal)
+                        .arg(settings.shell_path)
+                        .output()
+                    {
+                        Ok(..) => (),
+                        Err(..) => emit_error(app, "Failed to execute process"),
+                    }
+                } else {
+                    match Command::new("open")
+                        .arg("-a")
+                        .arg(settings.terminal)
+                        .arg(settings.shell_path)
+                        .output()
+                    {
+                        Ok(..) => (),
+                        Err(..) => emit_error(app, "Failed to execute process"),
+                    }
                 }
             }
         },
