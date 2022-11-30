@@ -4,7 +4,7 @@ A cross-platform desktop app to store and recall commands.
 
 ## Usage
 
-Add commands and directories using the "+" icon. These commands then are available in the menu. When selected, the command will be copied to the clipboard and a new terminal window. Paste and run the command.
+Add commands and directories using the "+" icon. These commands then are available in the menu. When selected, the command will be copied to the clipboard and a new terminal window. Paste and run the command. Commands can be deleted or edited.
 
 ## Menu Items
 
