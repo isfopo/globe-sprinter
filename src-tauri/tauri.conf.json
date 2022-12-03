@@ -7,13 +7,19 @@
   },
   "package": {
     "productName": "Globe Sprinter",
-    "version": "0.0.2"
+    "version": "0.0.3"
   },
   "tauri": {
     "allowlist": {
-      "all": true,
+      "shell": {
+        "open": true,
+        "execute": true
+      },
       "fs": {
         "scope": ["$APPDATA/*"]
+      },
+      "clipboard": {
+        "writeText": true
       }
     },
     "systemTray": {
