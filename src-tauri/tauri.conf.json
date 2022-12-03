@@ -11,9 +11,15 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true,
+      "shell": {
+        "open": true,
+        "execute": true
+      },
       "fs": {
         "scope": ["$APPDATA/*"]
+      },
+      "clipboard": {
+        "writeText": true
       }
     },
     "systemTray": {
